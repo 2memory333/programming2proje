@@ -1,0 +1,12 @@
+1,efe,5880,kervansaray,250,20,1604,07042024,1624,1650
+
+aktif sipariş
+siparis eden kişi adi
+siparis id
+yemek adi
+fiyati
+süresi
+sipariş saati
+sipariş tarihi
+tahmini teslim
+yemek teslim
