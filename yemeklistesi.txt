@@ -1,2 +1,1 @@
-1,pizza,200,15*1,imambayildi,70,5*1,patates kizartmasi,30,10*0,cift katli double soslu hamburger,250,15*1,lotus muhallebi,100,3*
-
+0,kebap,200,15*1,imambayildi,70,5*1,patates kizartmasi,30,10*0,cift katli double soslu hamburger,250,15*1,kervansaray,300,3*1,baris guldas,bedava,15*
