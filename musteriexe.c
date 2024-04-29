@@ -182,7 +182,7 @@ switch(key)
 case 1: //yemek listesi goruntuleme ve siparis verme
     system("cls");
     listeyioku(0);
-for(int i = 0; i < 4; i++)
+for(int i = 0; i < ind; i++)
 {
     printf("KOD:[%d] YEMEK:%s YEMEK FIYATI:%s HAZIRLANMA SURESI:%s\n",i,yemekadlari[i],yemekfiyatlari[i],yemeksureleri[i]);
 }
