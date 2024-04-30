@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-int saat = 1938;
+#include <time.h>
+
 int tarih = 24142024;
-int tahminiteslim = 2016;
-char kisiid[16] = "434330";
+char kisiid[16] = "434336";
 
 char yemekadlari[20][30];
 char yemekfiyatlari[20][4];
@@ -12,6 +12,31 @@ char yemeksureleri[20][4];
 int dizilericinindeks = 0;
 int gecmis; //gecmis veya mevcut siparislerin goruntulenmesi icin bool
 int yemeksayisi = 0; //kaç tane yemek oldugunu gosterir.
+
+int guncelsaat() {
+    time_t t;
+    struct tm* zaman;
+    int gsaat, gdakika;
+
+    // Şu anki zamanı al
+    t = time(NULL);
+    zaman = localtime(&t);
+
+    // Saat ve dakikayı al
+    gsaat = zaman->tm_hour;
+    gdakika = zaman->tm_min;
+
+    int saat = gsaat * 100 + gdakika;
+    return saat;
+}
+
+int dakikatopla(int saat, int dakika) {
+    int toplamsaat = saat / 100 + (saat % 100 + dakika) / 60;
+    toplamsaat %= 24;
+    int toplamdk = (saat % 100 + dakika) % 60;
+    int sayihalindesaat = toplamsaat * 100 + toplamdk;
+    return sayihalindesaat;
+}
 
 //siparisler.txt parcalar
 void parcalasiparisler(char okunanparca[]) {
@@ -197,7 +222,8 @@ baslangic:
             scanf("%d", &kod);
             FILE* dosya;
             dosya = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "a"); //txt'ye ekleme yapar
-            fprintf(dosya, "%s,2,%s,%d,%d,%d,%s*", kisiid, yemekadlari[kod], saat, tahminiteslim, tarih, yemekfiyatlari[kod]);
+            
+            fprintf(dosya, "%s,2,%s,%04d,%04d,%d,%s*", kisiid, yemekadlari[kod], guncelsaat(), dakikatopla(guncelsaat(),atoi(yemeksureleri[kod])), tarih, yemekfiyatlari[kod]);
             fclose(dosya);
             printf("%s siparisi basariyla alindi. geri donmek icin: [1]\n", yemekadlari[kod]);
             scanf("%d", &key);
