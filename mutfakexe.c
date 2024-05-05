@@ -89,24 +89,6 @@ void parcalayemeklistesi(char okunanparca[]) {
     }
 }
 
-//void tahminiteslimdegis(char metin[], int pos) //siparistxt'deki tahmini teslimati degisir
-//{
-//    if (!strcmp(parcala(metin, 1),degisensiparisid))
-//    {
-//        pos -= strlen(parcala(metin, 8));
-//        pos -= strlen(parcala(metin, 7));
-//        pos -= strlen(parcala(metin, 6));
-//        pos -= 2; //pozisyonu tahmini teslim kismina getiriyoruz.
-//        FILE* fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "r+");
-//        if (fileptr != NULL)
-//        {
-//            fseek(fileptr, pos, SEEK_SET);
-//            fprintf(fileptr, "%04d", hazirlamazamani);
-//            fclose(fileptr);
-//        }
-//    }
-//}
-
 void hazirlanmasuredegis(char degisensiparisid[], int hazirlamazamani)
 {
     FILE* fileptr;
