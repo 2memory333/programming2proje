@@ -3,17 +3,61 @@
 #include <string.h>
 #include <time.h>
 
-int tarih = 24142024;
-char kisiid[16] = "434336";
+char kisiid[16] = "434330";
+char okunantarih[10];
+char okunanID[20];
 
 char yemekadlari[20][30];
 char yemekfiyatlari[20][4];
 char yemeksureleri[20][4];
-int dizilericinindeks = 0;
+int index = 0;
 int gecmis; //gecmis veya mevcut siparislerin goruntulenmesi icin bool
 int yemeksayisi = 0; //kaç tane yemek oldugunu gosterir.
 
-int guncelsaat() {
+char* parcala(char metin[], int parca) {
+    static char buffer[100];
+    int i = 0;
+    int bufferindeks = 0;
+    int parcasayac = 0;
+
+    while (1)
+    {
+        if (metin[i] == NULL) {
+            buffer[bufferindeks] = '\0';
+            return buffer;
+        }
+        if (metin[i] == ',') {
+            parcasayac++;
+            if (parcasayac == parca)
+            {
+                buffer[bufferindeks] = '\0';
+                return buffer;
+            }
+            else {
+                memset(buffer, 0, sizeof(buffer));
+                bufferindeks = 0;
+            }
+        }
+        else {
+            buffer[bufferindeks] = metin[i];
+            bufferindeks++;
+        }
+        i++;
+    }
+}
+
+int siparisidolustur(char kisiid[]) {
+
+    int intkisiid = atoi(kisiid);
+    time_t t;
+
+    srand((unsigned)time(&t));
+
+    return intkisiid + rand();
+}
+
+int guncelzaman(int isaret) {
+
     time_t t;
     struct tm* zaman;
     int gsaat, gdakika;
@@ -21,98 +65,131 @@ int guncelsaat() {
     // Şu anki zamanı al
     t = time(NULL);
     zaman = localtime(&t);
-
-    // Saat ve dakikayı al
-    gsaat = zaman->tm_hour;
-    gdakika = zaman->tm_min;
-
-    int saat = gsaat * 100 + gdakika;
-    return saat;
+    
+    switch (isaret) {
+    case 1:
+        gsaat = zaman->tm_hour;
+        gdakika = zaman->tm_min;
+        return gsaat * 100 + gdakika;
+        break;
+    case 2:
+        return zaman->tm_mday;
+        break;
+    case 3:
+        return zaman->tm_mon + 1;
+        break;
+    case 4:
+        return zaman->tm_year + 1900;
+        break;
+    }
 }
 
 int dakikatopla(int saat, int dakika) {
+
     int toplamsaat = saat / 100 + (saat % 100 + dakika) / 60;
     toplamsaat %= 24;
+
     int toplamdk = (saat % 100 + dakika) % 60;
+
     int sayihalindesaat = toplamsaat * 100 + toplamdk;
+
     return sayihalindesaat;
 }
 
 //siparisler.txt parcalar
 void parcalasiparisler(char okunanparca[]) {
 
+    char okunandurum[2];
     int i = 0;
-    char* key;
-    key = strtok(okunanparca, ","); //strtok fonksiyonunu kullanip okunan parcayi tanitiriz.
-
-    if (!strcmp(key, kisiid)) { //eger okunan parcadaki id, kisiid'e esitse
-        key = strtok(NULL, ",");//key'e durum atandi
-
+    char* okunan;
+    okunan = strtok(okunanparca, ","); //strtok fonksiyonunu kullanip okunan parcayi tanitiriz, ilk bolum alinir yani siparisid
+    okunan = strtok(NULL, ",");    // durum atanır
+    strcpy(okunandurum, okunan);
+    okunan = strtok(NULL, ","); //kisiid atanır
+    if (!strcmp(okunan, kisiid)) { //eger okunan parcadaki id, kisiid'e esitse
         if (gecmis) { //eğer gecmis siparis goruntuleme isteniyorsa
-            if (!strcmp(key, "0"))
+            if (!strcmp(okunandurum, "0"))
             {
-                while (key != NULL) {
+                while (okunan != NULL) {
                     switch (i)
                     {
                     case 0: //durum
                         printf("[GECMIS]");
                         break;
+
                     case 1: //yemek adi
-                        printf("SIPARIS EDILMIS YEMEK:%s ", key);
+                        printf("SIPARIS EDILMIS YEMEK:%s ", okunan);
                         break;
+
                     case 2: //saat
-                        printf("SIPARIS SAATI:%s ", key);
+                        printf("SIPARIS SAATI:%s ", okunan);
                         break;
+
                     case 3: //teslim saati
-                        printf("TESLIM SAATI:%s ", key);
+                        printf("TESLIM SAATI:%s ", okunan);
                         break;
+
                     case 4:
-                        printf("SIPARIS TARIHI:%s ", key); //tarih
+                        strcpy(okunantarih, okunan);
+                        printf("SIPARIS TARIHI:%s ", okunan); //tarih
                         break;
+
                     case 5:
-                        printf("ODENMIS TUTAR:%s\n", key); //yemek fiyati
+                        printf("ODENMIS TUTAR:%s\n", okunan); //yemek fiyati
                         break;
-                    case 6:
-                        //siparis id
-                        break;
+
+                        /*case 6:
+                            strcpy(okunanID,(okunantarih,kisiid));
+                            printf("SIP%s_00%s",okunantarih,siparisidolustur);
+                            break;*/
                     }
-                    key = strtok(NULL, ","); //null ile strtok'a daha once parcaladigi dizinin kalan kismini kullanir
+                    okunan = strtok(NULL, ","); //null ile strtok'a daha once parcaladigi dizinin kalan kismini kullanir
                     i++;
                 }
             }
         }
 
         if (!gecmis) { //eğer mevcut sipariş görüntüleme istenirse
-            if (!strcmp(key, "1") || !strcmp(key, "2")) {
-                while (key != NULL) {
+            if (!strcmp(okunandurum, "1") || !strcmp(okunandurum, "2")) {
+                while (okunan != NULL) {
                     switch (i)
                     {
                     case 0: //durum
-                        if (!strcmp(key, "2"))
+                        if (!strcmp(okunandurum, "2")) {
                             printf("[ONAY BEKLIYOR]");
-                        if (!strcmp(key, "1"))
+                        }
+                        if (!strcmp(okunandurum, "1")) {
                             printf("[AKTIF SIPARIS]");
+                        }
                         break;
+
                     case 1: //yemek adi
-                        printf(" [%s]", key);
+                        printf(" Yemek:%s", okunan);
                         break;
+
                     case 2: //saat
-                        printf(" Saat:%s", key);
+                        printf(" Saat:%s", okunan);
                         break;
+
                     case 3: //tahmini teslim
-                        printf(" Tahmini teslim:%s", key);
+                        printf(" Tahmini teslim:%s", okunan);
                         break;
+
                     case 4:
-                        printf(" Tarih:%s", key); //tarih
+                        strcpy(okunantarih, okunan);
+                        printf(" Tarih:%s", okunan); //tarih
                         break;
+
                     case 5:
-                        printf(" Tutar:%s\n", key); //yemek fiyati
+                        printf(" Tutar:%s\n", okunan); //yemek fiyati
                         break;
-                    case 6:
-                        //siparis id
-                        break;
+
+                        /*case 6:
+                            strcpy(okunanID,(okunantarih,kisiid));
+                            printf("SIP%s_00%s",okunantarih,siparisidolustur);
+                            break;*/
                     }
-                    key = strtok(NULL, ","); //null ile strtok'a daha once parcaladigi dizinin kalan kismini kullanir
+                    okunan = strtok(NULL, ","); //null ile strtok'a daha once parcaladigi dizinin kalan kismini kullanir
                     i++;
                 }
             }
@@ -125,30 +202,33 @@ void parcalayemeklistesi(char okunanparca[]) {
 
     //verilen txt'de her * * arasindaki metini okuyup ilgili fonksiyonlara dagitir.
     int i = 0;
-    char* key;
-    key = strtok(okunanparca, ","); //strtok fonksiyonunu kullanip okunan parcayi tanitiriz.
+    char* okunan;
+    okunan = strtok(okunanparca, ","); //strtok fonksiyonunu kullanip okunan parcayi tanitiriz.
 
-    if (strcmp(key, "0")) { //eger key 1'e eşitse yani yemek mevcutsa, parcayi okumaya baslar
-        while (key != NULL) {
+    if (strcmp(okunan, "0")) { //eger key 1'e eşitse yani yemek mevcutsa, parcayi okumaya baslar
+        while (okunan != NULL) {
             switch (i)
             {
             case 0: //mevcutluk
                 break;
+
             case 1: //yemek adi
                 yemeksayisi++;
-                strcpy(yemekadlari[dizilericinindeks], key);
+                strcpy(yemekadlari[index], okunan);
                 break;
+
             case 2: //fiyati
-                strcpy(yemekfiyatlari[dizilericinindeks], key);
+                strcpy(yemekfiyatlari[index], okunan);
                 break;
+
             case 3: //hazirlanma suresi
-                strcpy(yemeksureleri[dizilericinindeks], key);
+                strcpy(yemeksureleri[index], okunan);
                 break;
             }
-            key = strtok(NULL, ","); //null ile strtok'a daha once parcaladigi dizinin kalan kismini kullanir
+            okunan = strtok(NULL, ","); //null ile strtok'a daha once parcaladigi dizinin kalan kismini kullanir
             i++;
         }
-        dizilericinindeks++;
+        index++;
     }
 }
 
@@ -156,32 +236,35 @@ void parcalayemeklistesi(char okunanparca[]) {
 void listeyioku(int k) {
 
     FILE* fileptr;
-    if (!k)
+    if (k == 0) {
         fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\yemeklistesi.txt", "r");
-    else
+    }
+    else{
         fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "r");
-
+    }
 
     if (fileptr == NULL) {
         printf("error");
     }
-    char buffer[100];
+    char parca[100];
     int karakter;
     int indeks = 0;
-    dizilericinindeks = 0;
+    index = 0;
     while ((karakter = fgetc(fileptr)) != EOF) { //tek tek karakter oku
         if (karakter == '*') //ilgili metin okundugunda
         {
-            buffer[indeks] = '\0';
-            if (!k)
-                parcalayemeklistesi(buffer);
-            else
-                parcalasiparisler(buffer);
-            memset(buffer, 0, sizeof(buffer)); //bufferi resetlemek icin fonk
+            parca[indeks] = '\0';
+            if (k == 0) {
+                parcalayemeklistesi(parca);
+            }
+            else {
+                parcalasiparisler(parca);
+            }
+            memset(parca, 0, sizeof(parca)); //bufferi resetlemek icin fonk
             indeks = 0; //buffere yazarken en basindan baslamak icin
         }
         else {
-            buffer[indeks] = karakter; //okunan chari bufferin belirli indeksine yaz
+            parca[indeks] = karakter; //okunan chari bufferin belirli indeksine yaz
             indeks++; //indeksi arttir
         }
     }
@@ -190,11 +273,81 @@ void listeyioku(int k) {
 }
 
 int mainsoru() {
-    int key;
-    printf("Ne yapmak istiyorsunuz?\n\n");
+    int secenek;
+
+    printf("Hosgeldiniz! Ne yapmak istiyorsunuz?\n\n");
     printf("[1] yemek listesini goruntule\n[2] siparis durumunu gor\n[3] onceki siparislerine bak\n");
+    scanf("%d", &secenek);
+
+    return secenek;
+}
+
+
+int siparisolustur()
+{
+    int key;
+    system("cls");
+    yemeksayisi = 0;
+    listeyioku(0);
+
+    for (int i = 0; i < yemeksayisi; i++)
+    {
+        printf("KOD:[%d] YEMEK:%s YEMEK FIYATI:%s HAZIRLANMA SURESI:%s\n", i, yemekadlari[i], yemekfiyatlari[i], yemeksureleri[i]);
+    }
+    printf("\n[1] siparis ver \n[2] geri don\n");
     scanf("%d", &key);
-    return key;
+
+    if (key == 1) {
+        int kod;
+        printf("Siparis edilcek yemek kodu: ");
+        scanf("%d", &kod);
+        FILE* dosya;
+        dosya = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "a"); //txt'ye ekleme yapar
+
+        fprintf(dosya, "SIP%d_%d,2,%s,%s,%04d,%04d,%02d%02d%d,%s*", guncelzaman(4), siparisidolustur(kisiid), kisiid, yemekadlari[kod], guncelzaman(1), dakikatopla(guncelzaman(1), atoi(yemeksureleri[kod])), guncelzaman(2), guncelzaman(3), guncelzaman(4), yemekfiyatlari[kod]);
+        fclose(dosya);
+        printf("%s siparisi basariyla alindi. geri donmek icin: [1]\n", yemekadlari[kod]);
+        scanf("%d", &key);
+
+        if (key == 1) {
+            return key;
+        }
+    }
+
+    if (key == 2) {
+        return key; //geri donmek icin
+    }
+}
+
+
+int siparisdurumu()
+{
+    int key;
+    system("cls");
+    gecmis = 0;
+    listeyioku(1);
+
+    printf("\n[1] geri don\n");
+    scanf("%d", &key);
+
+    if (key == 1) {
+        return key;
+    }
+}
+
+int gecmissiparisler()
+{
+    int key;
+    system("cls");
+    gecmis = 1;
+    listeyioku(1);
+
+    printf("\n[1] geri don\n");
+    scanf("%d", &key);
+
+    if (key == 1) {
+        return key;
+    }
 }
 
 int main()
@@ -207,51 +360,31 @@ baslangic:
     {
 
     case 1: //yemek listesi goruntuleme ve siparis verme
-        system("cls");
-        yemeksayisi = 0;
-        listeyioku(0);
-        for (int i = 0; i < yemeksayisi; i++)
-        {
-            printf("KOD:[%d] YEMEK:%s YEMEK FIYATI:%s HAZIRLANMA SURESI:%s\n", i, yemekadlari[i], yemekfiyatlari[i], yemeksureleri[i]);
+        key = siparisolustur();
+        if (key == 2) {
+            goto baslangic;
         }
-        printf("\n[1] siparis ver \n[2] geri don\n");
-        scanf("%d", &key);
-        if (key == 1) {
-            int kod;
-            printf("Siparis edilcek yemek kodu: ");
-            scanf("%d", &kod);
-            FILE* dosya;
-            dosya = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "a"); //txt'ye ekleme yapar
-            
-            fprintf(dosya, "%s,2,%s,%04d,%04d,%d,%s*", kisiid, yemekadlari[kod], guncelsaat(), dakikatopla(guncelsaat(),atoi(yemeksureleri[kod])), tarih, yemekfiyatlari[kod]);
-            fclose(dosya);
-            printf("%s siparisi basariyla alindi. geri donmek icin: [1]\n", yemekadlari[kod]);
-            scanf("%d", &key);
-            if (key == 1)
+        /*siparisolustur();*/
+        else if (key == 1) {
+            if (key == 1) {
                 goto baslangic;
+            }
         }
-        if (key == 2)
-            goto baslangic; //geri donmek icin
+
         break;
 
     case 2: //siparis durumu
-        system("cls");
-        gecmis = 0;
-        listeyioku(1);
-        printf("\n[1] geri don\n");
-        scanf("%d", &key);
-        if (key == 1)
+        key = siparisdurumu();
+        if (key == 1) {
             goto baslangic;
+        }
         break;
 
     case 3: //geçmiş siparislerim
-        system("cls");
-        gecmis = 1;
-        listeyioku(1);
-        printf("\n[1] geri don\n");
-        scanf("%d", &key);
-        if (key == 1)
+        key = gecmissiparisler();
+        if (key == 1) {
             goto baslangic;
+        }
         break;
     }
 }
