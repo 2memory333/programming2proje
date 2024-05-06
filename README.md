@@ -13,7 +13,7 @@ görüntüleyip mevcut olan yemeklerden sipariş verebilmektedir. Vermiş olduğ
 siparişinin hazırlanmasına ne kadar zaman kaldığını öğrenebilmektedir. Buna ek olarak kullanıcı, daha önce verdiği siparişleri de görüntüleyebilmektedir
 
 # Kullanılan fonksiyonlar;
-## listeyioku(int k)
+## void listeyioku(int k)
 Bu fonksiyonun temel amacı; veritabanları içerisindeki (siparişler.txt)(yemeklistesi.txt) özel karakterler arasında kalan metinleri sırası ile okur. Okuduğu bu
 metinleri işlemek için ilgili fonksiyonlara dağıtır.
 
@@ -34,3 +34,5 @@ bir arttırılır. Bunun sebebi bir sonraki okunan karakterin buffer dizisinde e
 aradığımız anlamlı metin kısmını bulmuşuzdur demektir. Buffer dizisinin indeks elemanı '\0' olarak ayarlanır bunun sebebi artık buffer dizisinin bittiğini göstermektir.
 Ardından okuduğumuz bu anlamlı metin işlenmek üzere ilgili fonksiyonlara "parcalayemeklistesi(),parcalasiparisler()" dağıtılır. Burada daha txt bitmediğinden okunacak başka anlamlı metinler de vardır. 
 Bu sebeple buffer dizisinin içi boşaltılıp diğer anlamlı metinleri almak için müsait olmalıdır. Bunu hazır fonksiyon olan memset(buffer,0,100) ile yaparız. Ardından indeks değişkenini tekrardan 0 yaparız. 
+
+## char* parcala(char metin[], int parca)
