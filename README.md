@@ -21,17 +21,16 @@ metinleri işlemek için ilgili fonksiyonlara dağıtır.
 
 buffer[100]; anlamlı metni yerleştirmek için bir dizidir.<br>
 int indeks = 0; buffer dizisinin indeksini belirtir.
-1) İlk olarak fopen fonksiyonu ile okunacak veri tabanı açılır. <br>
-2) Sonrasında (karakter = fgetc(fileptr) ile txt'den bir karakter okunur.  while ((karakter = fgetc(fileptr)) != EOF) ile txt bitene kadar okuma yapacağımız belirtilir.
-3) Okudugumuz karakter * mı değil mi diye kontrol edilir.
 
-Eğer * değil ise;
+**1)** İlk olarak fopen fonksiyonu ile okunacak veri tabanı açılır. <br>
+**2)** Sonrasında (karakter = fgetc(fileptr) ile txt'den bir karakter okunur.  while ((karakter = fgetc(fileptr)) != EOF) ile txt bitene kadar okuma yapacağımız belirtilir. <br>
+**3)** Okudugumuz karakter * mı değil mi diye kontrol edilir.
+
+**Eğer * değil ise**:<br>
 okuduğumuz karakter buffer adlı dizinin indeks değişkeni ile belirtilen elemanına yazılır. Ardından indeks değişkeni
 bir arttırılır. Bunun sebebi bir sonraki okunan karakterin buffer dizisinde en son eklediğimiz karakterin hemen yanına eklenmesini sağlamaktır.
 
-Eğer * karakterini okursak;
+**Eğer * karakterini okursak**:<br>
 aradığımız anlamlı metin kısmını bulmuşuzdur demektir. Buffer dizisinin indeks elemanı '\0' olarak ayarlanır bunun sebebi artık buffer dizisinin bittiğini göstermektir.
 Ardından okuduğumuz bu anlamlı metin işlenmek üzere ilgili fonksiyonlara "parcalayemeklistesi(),parcalasiparisler()" dağıtılır. Burada daha txt bitmediğinden okunacak başka anlamlı metinler de vardır. 
 Bu sebeple buffer dizisinin içi boşaltılıp diğer anlamlı metinleri almak için müsait olmalıdır. Bunu hazır fonksiyon olan memset(buffer,0,100) ile yaparız. Ardından indeks değişkenini tekrardan 0 yaparız. 
-
-
