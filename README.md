@@ -36,3 +36,5 @@ Ardından okuduğumuz bu anlamlı metin işlenmek üzere ilgili fonksiyonlara "p
 Bu sebeple buffer dizisinin içi boşaltılıp diğer anlamlı metinleri almak için müsait olmalıdır. Bunu hazır fonksiyon olan memset(buffer,0,100) ile yaparız. Ardından indeks değişkenini tekrardan 0 yaparız. 
 
 ## char* parcala(char metin[], int parca)
+Bu fonksiyonda temel amaç verilen anlamlı metin içerisindeki özel karakter (,) ile ayrılmış parçaları bulmaktır. Fonksiyonun ilk parametresi ile anlamlı metin girdi olarak verilir, ikinci parametresinde ise kaçıncı parça bulunmak istenildiği girilir. Örneğin; <br> char anlamli_metin[100] ="merhaba,dunya,hello,world"; <br> 
+Yukarıdaki diziyi, parcala(anlamli_metin,1) olarak çağırdığımızda bize merhaba kelimesini döndürür. parcala(anlamli_metin,3) olarak çağırırsak hello kelimesini döndürür. 
