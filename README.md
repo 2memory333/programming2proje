@@ -36,5 +36,12 @@ Ardından okuduğumuz bu anlamlı metin işlenmek üzere ilgili fonksiyonlara "p
 Bu sebeple buffer dizisinin içi boşaltılıp diğer anlamlı metinleri almak için müsait olmalıdır. Bunu hazır fonksiyon olan memset(buffer,0,100) ile yaparız. Ardından indeks değişkenini tekrardan 0 yaparız. 
 
 ## char* parcala(char metin[], int parca)
-Bu fonksiyonda temel amaç verilen anlamlı metin içerisindeki özel karakter (,) ile ayrılmış parçaları bulmaktır. Fonksiyonun ilk parametresi ile anlamlı metin girdi olarak verilir, ikinci parametresinde ise kaçıncı parça bulunmak istenildiği girilir. Örneğin; <br> char anlamli_metin[100] ="merhaba,dunya,hello,world"; <br> 
-Yukarıdaki diziyi, parcala(anlamli_metin,1) olarak çağırdığımızda bize merhaba kelimesini döndürür. parcala(anlamli_metin,3) olarak çağırırsak hello kelimesini döndürür. 
+Bu fonksiyonda temel amaç verilen anlamlı metin içerisindeki özel karakter (,) ile ayrılmış parçaları bulmaktır. Fonksiyonun ilk parametresi ile anlamlı metin girdi olarak verilir, ikinci parametresinde ise kaçıncı parça bulunmak istenildiği girilir.<br> **Örneğin:** <br> char anlamli_metin[100] ="merhaba,dunya,hello,world"; <br> 
+Yukarıdaki diziyi, parcala(anlamli_metin,1) olarak çağırdığımızda bize <ins>merhaba</ins> kelimesini döndürür. <br> parcala(anlamli_metin,3) olarak çağırırsak <ins>hello</ins> kelimesini döndürür. 
+
+# Veritabanları (txt dosyaları)
+## 1-) yemeklistesi.txt
+Restoranın sahip olduğu yemeklerin mevcutluğunu,adını,fiyatını ve hazırlanma süresini içerir.![siparislertxtsema](https://github.com/2memory333/programming2proje/assets/63019122/cffe1f5c-d74a-40a0-8ebb-59db4847b2c7) 
+<br>Burada her parça ',' ile ayrılarak anlamlı metin oluşturur. Anlamlı metinler ise birbirlerinden '*' karakteri ile ayrılır. <br>
+Her anlamlı metin [listeyioku](https://github.com/2memory333/programming2proje/edit/main/README.md#void-listeyiokuint-k) fonksiyonu ile okunur sonrasında [parcala](https://github.com/2memory333/programming2proje/edit/main/README.md#void-listeyiokuint-k) fonksiyonu kullanılarak parçalar okunur.
+
