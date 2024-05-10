@@ -1,7 +1,7 @@
 # PROJE ACIKLAMASI
 ### Özet:
 Bu proje restoran ve müşterileri için yemek-takip uygulamaları içerir. Toplamda üç adet uygulama vardır bunlar: Restoran.exe Müşteri.exe Mutfak.exe'dir.
-Toplamda 2 adet veritabanı vardır bunlar, [siparisler.txt](https://github.com/2memory333/programming2proje#2--siparislertxt) [yemeklistesi.txt](https://github.com/2memory333/programming2proje#1--yemeklistesitxt)'dir.
+Toplamda 2 adet veritabanı vardır bunlar, [siparisler.txt](https://github.com/2memory333/programming2proje#2--siparislertxt) ve [yemeklistesi.txt](https://github.com/2memory333/programming2proje#1--yemeklistesitxt)'dir.
 ![uygulamalar](https://github.com/2memory333/programming2proje/assets/63019122/cde705af-3bac-4f87-b97d-67d93e558580)
 
 # Uygulamalar ve yapabildikleri
