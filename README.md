@@ -43,5 +43,5 @@ Yukarıdaki diziyi, parcala(anlamli_metin,1) olarak çağırdığımızda bize <
 ## 1-) yemeklistesi.txt
 Restoranın sahip olduğu yemeklerin mevcutluğunu,adını,fiyatını ve hazırlanma süresini içerir.![siparislertxtsema](https://github.com/2memory333/programming2proje/assets/63019122/cffe1f5c-d74a-40a0-8ebb-59db4847b2c7) 
 <br>Burada her parça ',' ile ayrılarak anlamlı metin oluşturur. Anlamlı metinler ise birbirlerinden '*' karakteri ile ayrılır. <br>
-Her anlamlı metin [listeyioku](https://github.com/2memory333/programming2proje/edit/main/README.md#void-listeyiokuint-k) fonksiyonu ile okunur sonrasında [parcala](https://github.com/2memory333/programming2proje/edit/main/README.md#void-listeyiokuint-k) fonksiyonu kullanılarak parçalar okunur.
+Her anlamlı metin [listeyioku](https://github.com/2memory333/programming2proje?tab=readme-ov-file#void-listeyiokuint-k) fonksiyonu ile okunur sonrasında [parcala](https://github.com/2memory333/programming2proje?tab=readme-ov-file#char-parcalachar-metin-int-parca) fonksiyonu kullanılarak parçalar okunur.
 
