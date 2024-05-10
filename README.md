@@ -50,6 +50,19 @@ Bu sebeple buffer dizisinin içi boşaltılıp diğer anlamlı metinleri almak i
 Bu fonksiyonda temel amaç verilen anlamlı metin içerisindeki özel karakter (,) ile ayrılmış parçaları bulmaktır. Fonksiyonun ilk parametresi ile anlamlı metin girdi olarak verilir, ikinci parametresinde ise kaçıncı parça bulunmak istenildiği girilir.<br> **Örneğin:** <br> char anlamli_metin[100] ="merhaba,dunya,hello,world"; <br> 
 Yukarıdaki diziyi, parcala(anlamli_metin,1) olarak çağırdığımızda bize <ins>merhaba</ins> kelimesini döndürür. <br> parcala(anlamli_metin,3) olarak çağırırsak <ins>hello</ins> kelimesini döndürür. 
 
+## void parcalayemeklistesi(char okunanparca[])
+Fonksiyonun amacı yemeklistesi.txt içerisindeki tüm verileri ilgili dizilere yükleyerek bellek içine aktarmak. Ardından bu diziler kullanılarak örneğin ekrana yazdırılarak yemek listesi görüntülenmesi sağlanır.<br><br>
+Bu fonksiyon, (listeyioku) fonksiyonu tarafından parçalanmış anlamlı metni girdi olarak alır. <br><br>
+Aldığı bu metni (parcala) fonksiyonu ile parçalayıp elde ettiği parçaları düzen ve sıra içinde dizilere yükler.<br><br>
+![code](https://github.com/2memory333/programming2proje/assets/63019122/02e8ea66-6d94-40c8-a450-ae16c7aba351)
+
+(yemeklistesi.txt) içerisindeki bir siparişin verisine göre ilk parça bize yemeğin mevcutluğunu belirlir. Bu yüzden hazır strcmp fonksiyonu kullanılarak yemek eğer mevcut ise yani ilk parça 1 ise devam ederiz.<br><br>
+Ardından tüm parçaları ilgili dizilere yükleriz.<br><br>
+**index** değişkeni; okunan parçaları, dizilerin hangi elemanına yükleyeceğimizi belirtir. 
+
+
+
+
 # Veritabanları (txt dosyaları)
 Programların birbirleri ile bağlantı sağlayacağı önemli dosyalardır. Örneğin müşteri.exe tarafından verilen yemek siparişi onay durumunda siparisler.txt'ye yazılır.
 Restoran.exe siparisler.txt'yi okuyarak bu onay durumunda olan siparişe onay verir. Ardından müşteri.exe siparisler.txt üzerinde yapılan bu değişikliği görür ve o siparişi
