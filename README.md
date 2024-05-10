@@ -4,15 +4,28 @@ Bu proje restoran ve müşterileri için yemek-takip uygulamaları içerir. Topl
 Restoran.exe
 Müşteri.exe
 Mutfak.exe
+![uygulamalar](https://github.com/2memory333/programming2proje/assets/63019122/cde705af-3bac-4f87-b97d-67d93e558580)
 
 # Uygulamalar ve yapabildikleri
 
 ## 1-) Müşteri.exe
 Bu program restorandan sipariş vermek isteyen kullanıcılar içindir. Bu programda kullanıcılar restoranın menüsünü
 görüntüleyip mevcut olan yemeklerden sipariş verebilmektedir. Vermiş olduğu siparişin durumunu (onaylandı)(reddedildi)(mutfakta) ve 
-siparişinin hazırlanmasına ne kadar zaman kaldığını öğrenebilmektedir. Buna ek olarak kullanıcı, daha önce verdiği siparişleri de görüntüleyebilmektedir
+siparişinin hazırlanmasına ne kadar zaman kaldığını öğrenebilmektedir. Buna ek olarak kullanıcı, daha önce verdiği siparişleri de görüntüleyebilmektedir.
 
-# Kullanılan fonksiyonlar;
+## 2-) Restoran.exe
+Bu program; müşteriler tarafından verilmiş siparişleri yönetip, siparişler doğrultusunda analizler yapabilip, yemekler ve siparişler üzerinde güncelleme yapabilmektedir.<br><br>
+Müşteri tarafından verilen siparişlerin hepsi ilk başta onay durumundadır. Restoran.exe bu siparişlere ret/onay verir. Yapılan bu işlemler (siparisler.txt) veritabanında gerçekleşir ve
+müşteri.exe programı ile bağlantı sağlanır.<br>
+Restoran gerektiğinde (yemeklistesi.txt) veritabanı üzerinde değişikler yaparak yemeklerin: mevcutluk, ad, fiyat ve tahmini hazırlanma süresi üzerinde değişiklik yapabilir.<br>
+Restoran, (siparisler.txt) veritabanı üzerinden aldığı bilgiler doğrultusunda bir takım analizler yapabilmektedir. Bunlar: Belirli tarihte kazanç bulma, belirli ay için kazanç bulma, tarihler arasında kazanç
+bulma, en çok sipariş edilen yemeği bulma, en çok sipariş veren kullanıcıyı bulma, en çok sipariş edilen tarihi bulma olarak analiz yapılabilir.
+
+## 3-) Mutfak.exe
+Bu programda aşçılar, restoran tarafından onaylanmış siparişler için görevlendirilir. Bu görevlendirme siparişler <ins>en kısa sürede bitecek şekilde</ins> yapılır. Aşçılar görevlendirildikten sonra 
+her yemek için bir bitiş süresi oluşur. Bu bitiş süresi (siparisler.txt) kısmında yer alan aktif yemeğin tahmini bitiş süresi ile değiştirilir. Bu şekilde müşteri yemeğinin tam olarak hazır olma süresini öğrenir.
+
+# Kullanılan bazı fonksiyonlar;
 ## void listeyioku(int k)
 Bu fonksiyonun temel amacı; veritabanları içerisindeki (siparişler.txt)(yemeklistesi.txt) özel karakterler arasında kalan metinleri sırası ile okur. Okuduğu bu
 metinleri işlemek için ilgili fonksiyonlara dağıtır.
@@ -40,6 +53,10 @@ Bu fonksiyonda temel amaç verilen anlamlı metin içerisindeki özel karakter (
 Yukarıdaki diziyi, parcala(anlamli_metin,1) olarak çağırdığımızda bize <ins>merhaba</ins> kelimesini döndürür. <br> parcala(anlamli_metin,3) olarak çağırırsak <ins>hello</ins> kelimesini döndürür. 
 
 # Veritabanları (txt dosyaları)
+Programların birbirleri ile bağlantı sağlayacağı önemli dosyalardır. Örneğin müşteri.exe tarafından verilen yemek siparişi onay durumunda siparisler.txt'ye yazılır.
+Restoran.exe siparisler.txt'yi okuyarak bu onay durumunda olan siparişe onay verir. Ardından müşteri.exe siparisler.txt üzerinde yapılan bu değişikliği görür ve o siparişi
+aktif duruma geçirir.
+
 ## 1-) yemeklistesi.txt
 ![siparislertxtsema](https://github.com/2memory333/programming2proje/assets/63019122/cffe1f5c-d74a-40a0-8ebb-59db4847b2c7)<br>
 Restoranın sahip olduğu yemeklerin mevcutluğunu, adını, fiyatını ve hazırlanma süresini içerir.<br>
