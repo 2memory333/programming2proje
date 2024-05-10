@@ -57,7 +57,7 @@ Her anlamlı metin [listeyioku](https://github.com/2memory333/programming2proje?
 Üçüncü parça, siparişi yapan kullanıcının kimlik numarasını belirtir.<br><br>
 Döndüncü parça, sipariş edilen yemeği belirtir.<br><br>
 Beşinci parça, kullanıcının sipariş verdiği andaki saati belirtir.<br><br>
-Altıncı parça, kullanıcının sipariş verdiği andaki saat bilgisi ile ([yemeklistesi.txt](https://github.com/2memory333/programming2proje?tab=readme-ov-file#yemeklistesi-txt)) veritabanından okunan yemeğin tahmini yapım süresinin toplanması ile oluşur. Yemeğin o andaki <ins>tahmini bitiş süresini</ins> belirtir.
+Altıncı parça, kullanıcının sipariş verdiği andaki saat bilgisi ile [yemeklistesi.txt](https://github.com/2memory333/programming2proje/blob/main/README.md#1--yemeklistesitxt) veritabanından okunan yemeğin tahmini yapım süresinin toplanması ile oluşur. Yemeğin o andaki <ins>tahmini bitiş süresini</ins> belirtir.
 Ancak bu süre <ins>tahmini</ins> olup (mutfak.exe) tarafından aşçılar görevlendirildikten sonra değişebilir.<br><br>
 Yedinci parça: Sipariş verildiği andaki tarih bilgisini içerir.<br><br>
 Sekizinci parça: Sipariş edilen yemeğin o zamandaki fiyat bilgisini içerir.
