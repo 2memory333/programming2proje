@@ -15,17 +15,17 @@ siparişinin hazırlanmasına ne kadar zaman kaldığını öğrenebilmektedir. 
 Bu program; müşteriler tarafından verilmiş siparişleri yönetip, siparişler doğrultusunda analizler yapabilip, yemekler ve siparişler üzerinde güncelleme yapabilmektedir.<br><br>
 Müşteri tarafından verilen siparişlerin hepsi ilk başta onay durumundadır. Restoran.exe bu siparişlere ret/onay verir. Yapılan bu işlemler (siparisler.txt) veritabanında gerçekleşir ve
 müşteri.exe programı ile bağlantı sağlanır.<br>
-Restoran gerektiğinde (yemeklistesi.txt) veritabanı üzerinde değişikler yaparak yemeklerin: mevcutluk, ad, fiyat ve tahmini hazırlanma süresi üzerinde değişiklik yapabilir.<br>
-Restoran, (siparisler.txt) veritabanı üzerinden aldığı bilgiler doğrultusunda bir takım analizler yapabilmektedir. Bunlar: Belirli tarihte kazanç bulma, belirli ay için kazanç bulma, tarihler arasında kazanç
+Restoran gerektiğinde [yemeklistesi.txt](https://github.com/2memory333/programming2proje#1--yemeklistesitxt) veritabanı üzerinde değişikler yaparak yemeklerin: mevcutluk, ad, fiyat ve tahmini hazırlanma süresi üzerinde değişiklik yapabilir.<br>
+Restoran, [siparisler.txt](https://github.com/2memory333/programming2proje#2--siparislertxt) veritabanı üzerinden aldığı bilgiler doğrultusunda bir takım analizler yapabilmektedir. Bunlar: Belirli tarihte kazanç bulma, belirli ay için kazanç bulma, tarihler arasında kazanç
 bulma, en çok sipariş edilen yemeği bulma, en çok sipariş veren kullanıcıyı bulma, en çok sipariş edilen tarihi bulma olarak analiz yapılabilir.
 
 ## 3-) Mutfak.exe
 Bu programda aşçılar, restoran tarafından onaylanmış siparişler için görevlendirilir. Bu görevlendirme siparişler <ins>en kısa sürede bitecek şekilde</ins> yapılır. Aşçılar görevlendirildikten sonra 
-her yemek için bir bitiş süresi oluşur. Bu bitiş süresi (siparisler.txt) kısmında yer alan aktif yemeğin tahmini bitiş süresi ile değiştirilir. Bu şekilde müşteri yemeğinin tam olarak hazır olma süresini öğrenir.
+her yemek için bir bitiş süresi oluşur. Bu bitiş süresi [siparisler.txt](https://github.com/2memory333/programming2proje#2--siparislertxt) kısmında yer alan aktif yemeğin tahmini bitiş süresi ile değiştirilir. Bu şekilde müşteri yemeğinin tam olarak hazır olma süresini öğrenir.
 
 # Kullanılan bazı fonksiyonlar;
 ## void listeyioku(int k)
-Bu fonksiyonun temel amacı; veritabanları içerisindeki (siparişler.txt)(yemeklistesi.txt) özel karakterler arasında kalan metinleri sırası ile okur. Okuduğu bu
+Bu fonksiyonun temel amacı; veritabanları içerisindeki [siparisler.txt](https://github.com/2memory333/programming2proje#2--siparislertxt) , [yemeklistesi.txt](https://github.com/2memory333/programming2proje#1--yemeklistesitxt) özel karakterler arasında kalan metinleri sırası ile okur. Okuduğu bu
 metinleri işlemek için ilgili fonksiyonlara dağıtır.
 
 ![11111](https://github.com/2memory333/programming2proje/assets/63019122/fc70f76e-b434-43fa-8194-7e13f2b76075)
@@ -52,14 +52,19 @@ Yukarıdaki diziyi, parcala(anlamli_metin,1) olarak çağırdığımızda bize <
 
 ## void parcalayemeklistesi(char okunanparca[])
 Fonksiyonun amacı yemeklistesi.txt içerisindeki tüm verileri ilgili dizilere yükleyerek bellek içine aktarmak. Ardından bu diziler kullanılarak örneğin ekrana yazdırılarak yemek listesi görüntülenmesi sağlanır.<br><br>
-Bu fonksiyon, (listeyioku) fonksiyonu tarafından parçalanmış anlamlı metni girdi olarak alır. <br><br>
-Aldığı bu metni (parcala) fonksiyonu ile parçalayıp elde ettiği parçaları düzen ve sıra içinde dizilere yükler.<br><br>
+Bu fonksiyon, [listeyioku](https://github.com/2memory333/programming2proje#void-listeyiokuint-k) fonksiyonu tarafından parçalanmış anlamlı metni girdi olarak alır. <br><br>
+Aldığı bu metni [parcala](https://github.com/2memory333/programming2proje#char-parcalachar-metin-int-parca) fonksiyonu ile parçalayıp elde ettiği parçaları düzen ve sıra içinde dizilere yükler.<br><br>
 ![code](https://github.com/2memory333/programming2proje/assets/63019122/02e8ea66-6d94-40c8-a450-ae16c7aba351)
 
-(yemeklistesi.txt) içerisindeki bir siparişin verisine göre ilk parça bize yemeğin mevcutluğunu belirlir. Bu yüzden hazır strcmp fonksiyonu kullanılarak yemek eğer mevcut ise yani ilk parça 1 ise devam ederiz.<br><br>
+[yemeklistesi.txt](https://github.com/2memory333/programming2proje#1--yemeklistesitxt) içerisindeki bir siparişin verisine göre ilk parça bize yemeğin mevcutluğunu belirlir. Bu yüzden hazır strcmp fonksiyonu kullanılarak yemek eğer mevcut ise yani ilk parça 1 ise devam ederiz.<br><br>
 Ardından tüm parçaları ilgili dizilere yükleriz.<br><br>
 **index** değişkeni; okunan parçaları, dizilerin hangi elemanına yükleyeceğimizi belirtir. 
 
+## void parcalayemeklistesi(char okunanparca[])
+Fonksiyondaki amaç müşteri tarafından verilmiş tüm siparişleri filtrelemeler yaparak ekrana yazdırmaktır. <br> <br>
+![ekran](https://github.com/2memory333/programming2proje/assets/63019122/970104fb-520d-4e96-8c77-763234edec13)
+<br>Öncelikle siparişlerini görüntüleyecek olan müşterinin kimliği ile verilen siparişteki kimlik uyuşuyor mu diye kontrol edilir. Eğer uyuşuyorsa devam edilir.<br>
+Ardından müşteri geçmiş mi yoksa mevcut siparişini mi görüntülemek istediği "geçmiş" değişkeni ile kontrol edilir. <br>
 
 
 
