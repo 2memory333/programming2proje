@@ -1,9 +1,7 @@
 # PROJE ACIKLAMASI
 ### Özet:
-Bu proje restoran ve müşterileri için yemek-takip uygulamaları içerir. Toplamda üç adet uygulama vardır bunlar:
-Restoran.exe
-Müşteri.exe
-Mutfak.exe
+Bu proje restoran ve müşterileri için yemek-takip uygulamaları içerir. Toplamda üç adet uygulama vardır bunlar: Restoran.exe Müşteri.exe Mutfak.exe'dir.
+Toplamda 2 adet veritabanı vardır bunlar, [siparisler.txt](https://github.com/2memory333/programming2proje#2--siparislertxt) [yemeklistesi.txt](https://github.com/2memory333/programming2proje#1--yemeklistesitxt)'dir.
 ![uygulamalar](https://github.com/2memory333/programming2proje/assets/63019122/cde705af-3bac-4f87-b97d-67d93e558580)
 
 # Uygulamalar ve yapabildikleri
@@ -62,7 +60,7 @@ aktif duruma geçirir.
 Restoranın sahip olduğu yemeklerin mevcutluğunu, adını, fiyatını ve hazırlanma süresini içerir.<br>
 İlk parçada okunan değer yemeğin mevcut olup olmadığı, ikinci parça yemek adı, üçüncü parça restoran.exe tarafından verilmiş tahmini hazırlanma süresi son parça ise fiyat bilgisini taşır.<br>
 <br>Burada her parça ',' ile ayrılarak anlamlı metin oluşturur. Anlamlı metinler ise birbirlerinden '*' karakteri ile ayrılır. <br>
-Her anlamlı metin [listeyioku](https://github.com/2memory333/programming2proje?tab=readme-ov-file#void-listeyiokuint-k) fonksiyonu ile okunur sonrasında [parcala](https://github.com/2memory333/programming2proje?tab=readme-ov-file#char-parcalachar-metin-int-parca) fonksiyonu kullanılarak parçalar okunur.
+Her anlamlı metin [listeyioku](https://github.com/2memory333/programming2proje#void-listeyiokuint-k) fonksiyonu ile okunur sonrasında [parcala](https://github.com/2memory333/programming2proje#char-parcalachar-metin-int-parca) fonksiyonu kullanılarak parçalar okunur.
 ## 2-) siparisler.txt
 ![siparislertxtsema](https://github.com/2memory333/programming2proje/assets/63019122/c9c4d22d-cf99-427a-9d16-928764c2d29e) Müşteriler tarafından verilmiş tüm siparişlerin kayıtlarının tutulduğu veritabanıdır. <br>
 İlk parça, her kullanıcının verdiği her bir sipariş için benzersiz rastgele bir şekilde oluşan kimlik numarasıdır. <br><br>
@@ -74,8 +72,8 @@ Her anlamlı metin [listeyioku](https://github.com/2memory333/programming2proje?
 Üçüncü parça, siparişi yapan kullanıcının kimlik numarasını belirtir.<br><br>
 Döndüncü parça, sipariş edilen yemeği belirtir.<br><br>
 Beşinci parça, kullanıcının sipariş verdiği andaki saati belirtir.<br><br>
-Altıncı parça, kullanıcının sipariş verdiği andaki saat bilgisi ile [yemeklistesi.txt](https://github.com/2memory333/programming2proje/blob/main/README.md#1--yemeklistesitxt) veritabanından okunan yemeğin tahmini yapım süresinin toplanması ile oluşur. Yemeğin o andaki <ins>tahmini bitiş süresini</ins> belirtir.
-Ancak bu süre <ins>tahmini</ins> olup (mutfak.exe) tarafından aşçılar görevlendirildikten sonra değişebilir.<br><br>
+Altıncı parça, kullanıcının sipariş verdiği andaki saat bilgisi ile [yemeklistesi.txt](https://github.com/2memory333/programming2proje#1--yemeklistesitxt) veritabanından okunan yemeğin tahmini yapım süresinin toplanması ile oluşur. Yemeğin o andaki <ins>tahmini bitiş süresini</ins> belirtir.
+Ancak bu süre <ins>tahmini</ins> olup [mutfak.exe](https://github.com/2memory333/programming2proje#3--mutfakexe) tarafından aşçılar görevlendirildikten sonra değişebilir.<br><br>
 Yedinci parça: Sipariş verildiği andaki tarih bilgisini içerir.<br><br>
 Sekizinci parça: Sipariş edilen yemeğin o zamandaki fiyat bilgisini içerir.
 
