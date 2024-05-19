@@ -14,46 +14,55 @@ int index = 0;
 int gecmis; //gecmis veya mevcut siparislerin goruntulenmesi icin bool
 int yemeksayisi = 0; //kaç tane yemek oldugunu gosterir.
 
-char* parcala(char metin[], int parca) {
-    static char buffer[100];
-    int i = 0;
-    int bufferindeks = 0;
-    int parcasayac = 0;
-
-    while (1)
+char* parcala(char buffer[], int parca)
+{
+    int count = 0;
+    char kelime[30];
+    int kind = 0;
+    int ind = 0;
+    while (buffer[ind] != '\0')
     {
-        if (metin[i] == NULL) {
-            buffer[bufferindeks] = '\0';
-            return buffer;
-        }
-        if (metin[i] == ',') {
-            parcasayac++;
-            if (parcasayac == parca)
+        if (buffer[ind] == ',')
+        {
+            count++;
+            kelime[kind] = '\0';
+            if (count == parca)
             {
-                buffer[bufferindeks] = '\0';
-                return buffer;
+                return kelime;
+                break;
             }
-            else {
-                memset(buffer, 0, sizeof(buffer));
-                bufferindeks = 0;
-            }
+            memset(kelime, 0, sizeof(kelime));
+            kind = 0;
         }
-        else {
-            buffer[bufferindeks] = metin[i];
-            bufferindeks++;
+        else
+        {
+            kelime[kind] = buffer[ind];
+            kind++;
         }
-        i++;
+        ind++;
     }
+    kelime[kind] = '\0'; //en son parcayi alirken ',' olmadigi icin sonsuz donguye girmesi engellenir
+    return kelime;
 }
 
-int siparisidolustur(char kisiid[]) {
-
-    int intkisiid = atoi(kisiid);
+int siparisidolustur() {
+    static int seed = 1;
+    int rastgele = 0;
+    int random = 0;
+    int carpim = 10;
     time_t t;
-
-    srand((unsigned)time(&t));
-
-    return intkisiid + rand();
+    srand((unsigned)seed + time(&t)); // Her çağrıda farklı bir seed değeri al
+    int i;
+    for (i = 0; i < 5; i++) {
+        while (rastgele == 0) {
+            rastgele = rand() % 10;
+        }
+        random += rastgele * carpim;
+        carpim *= 10;
+        rastgele = 0;
+    }
+    seed++;
+    return random;
 }
 
 int guncelzaman(int isaret) {
@@ -102,48 +111,51 @@ void parcalasiparisler(char okunanparca[]) {
     if (!strcmp(parcala(okunanparca, 3), kisiid)) {
         if (gecmis == 1)
         {
-            if (!strcmp(parcala(okunanparca, 2), "0") || !strcmp(parcala(okunanparca, 2), "3"))
-            {
                 if (!strcmp(parcala(okunanparca, 2), "0"))
                 {
                     printf("[GECMIS]");
-                    printf("SIPARIS EDILMIS YEMEK:%s ", parcala(okunanparca, 4));
-                    printf("SIPARIS SAATI:%s ", parcala(okunanparca, 5));
-                    printf("TESLIM SAATI:%s ", parcala(okunanparca, 6));
-                    printf("SIPARIS TARIHI:%s ", parcala(okunanparca, 7));
-                    printf("ODENMIS TUTAR:%s\n", parcala(okunanparca, 8));
+                    printf(" SIPARIS EDILMIS YEMEK:%s ", parcala(okunanparca, 4));
+                    printf(" | SIPARIS SAATI:%s ", parcala(okunanparca, 5));
+                    printf(" | TESLIM SAATI:%s ", parcala(okunanparca, 6));
+                    printf(" | SIPARIS TARIHI:%s ", parcala(okunanparca, 7));
+                    printf(" | ODENMIS TUTAR:TL%s\n", parcala(okunanparca, 8));
                 }
                 else
                 {
                     printf("[IPTAL]");
-                    printf("IPTAL EDILMIS YEMEK:%s ", parcala(okunanparca, 4));
-                    printf("SIPARIS SAATI:%s ", parcala(okunanparca, 5));
-                    printf("SIPARIS TARIHI:%s ", parcala(okunanparca, 7));
+                    printf(" IPTAL EDILMIS YEMEK:%s ", parcala(okunanparca, 4));
+                    printf(" | SIPARIS SAATI:%s ", parcala(okunanparca, 5));
+                    printf(" | SIPARIS TARIHI:%s \n", parcala(okunanparca, 7));
                 }
-            }
         }
         if (gecmis == 0)
         {
-            if (!strcmp(parcala(okunanparca, 2), "1") || !strcmp(parcala(okunanparca, 2), "2"))
-            {
                 if (!strcmp(parcala(okunanparca, 2), "1"))
                 {
                     printf("[AKTIF SIPARIS]");
                     printf(" Yemek:%s", parcala(okunanparca, 4));
-                    printf(" Siparis Saat:%s", parcala(okunanparca, 5));
-                    printf(" Teslim edilcek saat:%s", parcala(okunanparca, 6));
-                    printf(" Tarih:%s", parcala(okunanparca, 7));
-                    printf(" Tutar:%s\n", parcala(okunanparca, 8));
+                    printf(" | Siparis Saat:%s", parcala(okunanparca, 5));
+                    printf(" | Tahmini teslim saati:%s", parcala(okunanparca, 6));
+                    printf(" | Tarih:%s", parcala(okunanparca, 7));
+                    printf(" | Tutar:%sTL\n", parcala(okunanparca, 8));
                 }
                 if (!strcmp(parcala(okunanparca, 2), "2"))
                 {
                     printf("[ONAY BEKLIYOR]");
                     printf(" Yemek:%s", parcala(okunanparca, 4));
-                    printf(" Siparis Saat:%s", parcala(okunanparca, 5));
-                    printf(" Tarih:%s", parcala(okunanparca, 7));
-                    printf(" Tutar:%s\n", parcala(okunanparca, 8));
+                    printf(" | Siparis Saat:%s", parcala(okunanparca, 5));
+                    printf(" | Tarih:%s", parcala(okunanparca, 7));
+                    printf(" | Tutar:%sTL\n", parcala(okunanparca, 8));
                 }
-            }
+                if (!strcmp(parcala(okunanparca, 2), "4"))
+                {
+                    printf("[MUTFAKTA]");
+                    printf(" Yemek:%s", parcala(okunanparca, 4));
+                    printf(" | Siparis Saat:%s", parcala(okunanparca, 5));
+                    printf(" | Teslim Saati:%s", parcala(okunanparca, 6));
+                    printf(" | Tarih:%s", parcala(okunanparca, 7));
+                    printf(" | Tutar:%sTL\n", parcala(okunanparca, 8));
+                }
         }
     }
 }
@@ -204,7 +216,7 @@ int mainsoru() {
     int secenek;
 
     printf("Hosgeldiniz! Ne yapmak istiyorsunuz?\n\n");
-    printf("[1] yemek listesini goruntule\n[2] siparis durumunu gor\n[3] onceki siparislerine bak\n");
+    printf("[1] yemek listesini goruntule\n[2] siparis durumunu gor\n[3] onceki siparislerimi goruntule\n");
     scanf("%d", &secenek);
 
     return secenek;
@@ -219,19 +231,17 @@ int siparisolustur()
 
     for (int i = 0; i < yemeksayisi; i++)
     {
-        printf("KOD:[%d] YEMEK:%s YEMEK FIYATI:%s HAZIRLANMA SURESI:%s\n", i, yemekadlari[i], yemekfiyatlari[i], yemeksureleri[i]);
+        printf("KOD:[%d] YEMEK:%s YEMEK FIYATI:%sTL HAZIRLANMA SURESI:%sDK\n", i, yemekadlari[i], yemekfiyatlari[i], yemeksureleri[i]);
     }
-        int siparisid;
-        siparisid = siparisidolustur(kisiid);
         int kod;
         siparis:
-        printf("\nGeri donmek icin [50], Siparis edilcek yemek kodu: ");
+        printf("\nGeri donmek icin [50], Siparis edilecek yemek kodu: ");
         scanf("%d", &kod);
         if (kod == 50)
             return 0;
         FILE* dosya;
         dosya = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "a"); //txt'ye ekleme yapar
-        fprintf(dosya, "SIP%d_%d,2,%s,%s,%04d,%04d,%02d%02d%d,%s*", guncelzaman(4), siparisid, kisiid, yemekadlari[kod], guncelzaman(1), dakikatopla(guncelzaman(1), atoi(yemeksureleri[kod])), guncelzaman(2), guncelzaman(3), guncelzaman(4), yemekfiyatlari[kod]);
+        fprintf(dosya, "SIP%s_%d,2,%s,%s,%04d,%04d,%02d%02d%d,%s*", kisiid, siparisidolustur(), kisiid, yemekadlari[kod], guncelzaman(1), dakikatopla(guncelzaman(1), atoi(yemeksureleri[kod])), guncelzaman(2), guncelzaman(3), guncelzaman(4), yemekfiyatlari[kod]);
         fclose(dosya);
         printf("%s siparisi basariyla alindi.\n",yemekadlari[kod]);
         goto siparis;   
@@ -239,30 +249,27 @@ int siparisolustur()
 
 int siparisdurumu()
 {
-    int key;
+    char key;
     system("cls");
     gecmis = 0;
     listeyioku(1);
-
-    printf("\n[1] geri don\n");
-    scanf("%d", &key);
-
-    if (key == 1) {
+    printf("\n[g] geri don\n");
+    while (getchar() != '\n');
+    scanf("\n%c", &key);
+    if (key == 'g') {
         return 0;
     }
 }
 
 int gecmissiparisler()
 {
-    int key;
+    char key;
     system("cls");
     gecmis = 1;
     listeyioku(1);
-
-    printf("\n[1] geri don\n");
-    scanf("%d", &key);
-
-    if (key == 1) {
+    printf("\n[g] geri don\n");
+    scanf("\n%c", &key);
+    if (key == 'g') {
         return 0;
     }
 }
