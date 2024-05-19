@@ -14,35 +14,36 @@ int index = 0;
 int gecmis; //gecmis veya mevcut siparislerin goruntulenmesi icin bool
 int yemeksayisi = 0; //kaç tane yemek oldugunu gosterir.
 
-char* parcala(char buffer[], int parca)
-{
-    int count = 0;
-    char kelime[30];
-    int kind = 0;
-    int ind = 0;
-    while (buffer[ind] != '\0')
+char* parcala(char metin[], int parca) {
+    static char buffer[100];
+    int i = 0;
+    int bufferindeks = 0;
+    int parcasayac = 0;
+
+    while (1)
     {
-        if (buffer[ind] == ',')
-        {
-            count++;
-            kelime[kind] = '\0';
-            if (count == parca)
+        if (metin[i] == NULL) {
+            buffer[bufferindeks] = '\0';
+            return buffer;
+        }
+        if (metin[i] == ',') {
+            parcasayac++;
+            if (parcasayac == parca)
             {
-                return kelime;
-                break;
+                buffer[bufferindeks] = '\0';
+                return buffer;
             }
-            memset(kelime, 0, sizeof(kelime));
-            kind = 0;
+            else {
+                memset(buffer, 0, sizeof(buffer));
+                bufferindeks = 0;
+            }
         }
-        else
-        {
-            kelime[kind] = buffer[ind];
-            kind++;
+        else {
+            buffer[bufferindeks] = metin[i];
+            bufferindeks++;
         }
-        ind++;
+        i++;
     }
-    kelime[kind] = '\0'; //en son parcayi alirken ',' olmadigi icin sonsuz donguye girmesi engellenir
-    return kelime;
 }
 
 int siparisidolustur() {
