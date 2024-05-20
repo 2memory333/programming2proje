@@ -10,36 +10,35 @@ char yemeksureleri[30][4];
 
 int index = 0; //yemek dizileri icin id;
 
-char* parcala(char metin[], int parca) {
-    static char buffer[100];
-    int i = 0;
-    int bufferindeks = 0;
-    int parcasayac = 0;
-
-    while (1)
+char* parcala(char buffer[], int parca)
+{
+    int count = 0;
+    static char kelime[30]; //fonksiyonun geriye char dizisini döndürebilmesi icin bellekte degismeyen alan tahsis edilmesi lazim
+    int kind = 0;
+    int ind = 0;
+    while (buffer[ind] != '\0')
     {
-        if (metin[i] == NULL) {
-            buffer[bufferindeks] = '\0';
-            return buffer;
-        }
-        if (metin[i] == ',') {
-            parcasayac++;
-            if (parcasayac == parca)
+        if (buffer[ind] == ',')
+        {
+            count++;
+            kelime[kind] = '\0';
+            if (count == parca)
             {
-                buffer[bufferindeks] = '\0';
-                return buffer;
+                return kelime;
+                break;
             }
-            else {
-                memset(buffer, 0, sizeof(buffer));
-                bufferindeks = 0;
-            }
+            memset(kelime, 0, sizeof(kelime));
+            kind = 0;
         }
-        else {
-            buffer[bufferindeks] = metin[i];
-            bufferindeks++;
+        else
+        {
+            kelime[kind] = buffer[ind];
+            kind++;
         }
-        i++;
+        ind++;
     }
+    kelime[kind] = '\0'; //en son parcayi alirken ',' olmadigi icin sonsuz donguye girmesi engellenir
+    return kelime;
 }
 
 //////// EN FAZLA BULMA ///////////////////////////////////////////////////////////////
@@ -194,12 +193,12 @@ void parcalasiparisler(char okunanparca[])
     if (!strcmp(parcala(okunanparca, 2), "2")) //onay durumunda ise
     {
         printf("[%s] [ONAY BEKLIYOR] ", parcala(okunanparca, 1));
-        printf("KULLANICI:%s ", parcala(okunanparca, 3));
-        printf("YEMEK:%s ", parcala(okunanparca, 4));
-        printf("SAAT:%s ", parcala(okunanparca, 5));
-        printf("TAHMINI TESLIM SAATI:%s ", parcala(okunanparca, 6));
-        printf("SIPARIS TARIHI:%s ", parcala(okunanparca, 7));
-        printf("ODENMIS TUTAR:%s\n", parcala(okunanparca, 8));
+        printf("| KULLANICI:%s ", parcala(okunanparca, 3));
+        printf("| YEMEK:%s ", parcala(okunanparca, 4));
+        printf("| SAAT:%s ", parcala(okunanparca, 5));
+        printf("| TAHMINI TESLIM SAATI:%s ", parcala(okunanparca, 6));
+        printf("| SIPARIS TARIHI:%s ", parcala(okunanparca, 7));
+        printf("| ODENMIS TUTAR:%s\n", parcala(okunanparca, 8));
     }
 }
 
@@ -299,7 +298,7 @@ bas:
             system("cls");;
             printf("------------------------------------------------------------------------------------------------------------------------\n");
             for (int i = 0; i < yemeksayisi; i++) {
-                printf("[SIRA]:%d [MEVCUTLUK]:%s [YEMEK ADI]:%s [FIYATI]:%s [HAZIRLANMA SURESI]:%s\n", i, yemekmevcutluk[i], yemekadlari[i], yemekfiyatlari[i], yemeksureleri[i]);
+                printf("[SIRA]:%d | [MEVCUTLUK]:%s | [YEMEK ADI]:%s | [FIYATI]:%sTL | [HAZIRLANMA SURESI]:%sDK\n", i, yemekmevcutluk[i], yemekadlari[i], yemekfiyatlari[i], yemeksureleri[i]);
             }
             printf("------------------------------------------------------------------------------------------------------------------------\n");
             printf("\nKomutlar: k kaydet, e ekle \nkomut kodlari: m mevcutluk , a yemek adi, f fiyat, s hazirlanma suresi   komutkodu-(sira)-(birim)\n");
@@ -386,15 +385,15 @@ bas:
     islemlerbaslangic:
         printf("-------------------------------------------\n");
         printf("Secebileceginiz islemler:\n");
-        printf("Beliri ay icin kazanilan para [1]\n");
-        printf("Beliri tarih icin kazanilan para [2]\n");
-        printf("Tarihler arasi para kazanmayi goruntule [3]\n");
-        printf("En fazla siparis veren kullanici [4]\n");
-        printf("En cok tercih edilen yemek [5]\n");
-        printf("En cok siparis alinan tarih [6]\n");
-        printf("Calisan asci sayisini belirle [7]\n");
-        printf("Yemek yapim suresini belirle [8]\n");
-        printf("\nGunun siparis kaydini al [9]\n");
+        printf("[1] Belirli aydaki kazanc\n");
+        printf("[2] Belirli tarihteki kazanc\n");
+        printf("[3] Tarihler arasi kazanc\n");
+        printf("[4] En cok siparis veren kullanici\n");
+        printf("[5] En cok tercih edilen yemek\n");
+        printf("[6] En cok siparis alinan tarih\n");
+        printf("[7] Calisan asci sayisini belirle\n");
+        printf("[8] Gunun siparis kaydini al\n");
+        printf("\n[9] Geri don\n");
         printf("-------------------------------------------\n");
         scanf("%d", &islemkodu);
         if (islemkodu == 1)
@@ -402,23 +401,23 @@ bas:
             system("cls");
             printf("Ay giriniz (ornek subat icin 2, ekim icin 10): ");
             scanf("%d", &param1);
-            printf("Secilen aydaki toplam kazanc: %d\n\n", araclar(1, param1, 0));
+            printf("Secilen aydaki toplam kazanc: %dTL\n\n", araclar(1, param1, 0));
             goto islemlerbaslangic;
         }
         if (islemkodu == 2)
         {
             system("cls");
-            printf("Tarih giriniz (ornek 05112024): ");
+            printf("Tarih giriniz (GGAAYYYY): ");
             scanf("%d", &param1);
-            printf("Girilen tarihdeki toplam kazanc: %d\n\n", araclar(2, param1, 0));
+            printf("Girilen tarihdeki toplam kazanc: %dTL\n\n", araclar(2, param1, 0));
             goto islemlerbaslangic;
         }
         if (islemkodu == 3)
         {
             system("cls");
-            printf("Sirayla iki tarih giriniz (ornek 05112024 06112024): ");
+            printf("Sirayla iki tarih giriniz (ornek GGAAYYYY GGAAYYYY): ");
             scanf("%d %d", &param1, &param2);
-            printf("Girilen tarihler arasi toplam kazanc: %d\n\n", araclar(3, param1, param2));
+            printf("Girilen tarihler arasi toplam kazanc: %dTL\n\n", araclar(3, param1, param2));
             goto islemlerbaslangic;
         }
         if (islemkodu == 4)
@@ -427,6 +426,7 @@ bas:
             araclar(4, 3, 0);
             printf("En fazla siparis veren kullanici: %s\n", arananlar[dizienbuyuk(elemansayi)]);
             printf("Verdigi siparis sayisi: %d\n\n", elemansayi[dizienbuyuk(elemansayi)]);
+
             goto islemlerbaslangic;
         }
         if (islemkodu == 5)
@@ -440,9 +440,9 @@ bas:
         {
             system("cls");
             araclar(4, 7, 0);
-            printf("En fazla siparis verilen tarih: %s\n", arananlar[dizienbuyuk(elemansayi)]);
+            printf("En fazla siparis verilen tarih: %s (GGAAYYYY)\n", arananlar[dizienbuyuk(elemansayi)]);
             printf("Verilen toplam siparis: %d\n", elemansayi[dizienbuyuk(elemansayi)]);
-            printf("Toplanan kazanc: %d\n\n", araclar(2, atoi(arananlar[dizienbuyuk(elemansayi)]), 0));
+            printf("Toplanan kazanc: %dTL\n\n", araclar(2, atoi(arananlar[dizienbuyuk(elemansayi)]), 0));
             goto islemlerbaslangic;
         }
         if (islemkodu == 7)
@@ -451,12 +451,8 @@ bas:
         }
         if (islemkodu == 8)
         {
-
-        }
-        if (islemkodu == 9)
-        {
             char saveislemtarih[16];
-            printf("\nKayit tarihini gun ay yil giriniz ornek(02112024): ");
+            printf("\nKayit tarihini gun ay yil giriniz ornek(GGAAYYYY): ");
             scanf("%s", saveislemtarih);
             strcat(saveislemtarih,".txt");
 
@@ -478,6 +474,10 @@ bas:
             system("cls");
             printf("Kayit alindi.\n\n");
             goto islemlerbaslangic;
+        }
+        if (islemkodu == 9)
+        {
+            goto bas;
         }
     }
 }
