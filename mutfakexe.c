@@ -47,37 +47,65 @@ int hazirlamasuresibul(char *dizi) //yemek adini kullanarak o yemegin suresini b
     return 0;
 }
 
-char* parcala(char metin[], int parca) {
-    static char buffer[100];
-    int i = 0;
-    int bufferindeks = 0;
-    int parcasayac = 0;
-
-    while (1)
+char* parcala(char buffer[], int parca)
+{
+    int count = 0;
+    char kelime[30];
+    int kind = 0;
+    int ind = 0;
+    while (buffer[ind] != '\0')
     {
-        if (metin[i] == NULL) {
-            buffer[bufferindeks] = '\0';
-            return buffer;
+        if (buffer[ind] == ',')
+        {
+            count++;
+            kelime[kind] = '\0';
+            if (count == parca)
+            {
+                return kelime;
+                break;
+            }
+            memset(kelime, 0, sizeof(kelime));
+            kind = 0;
         }
-        if (metin[i] == ',') {
-            parcasayac++;
-            if (parcasayac == parca)
+        else
+        {
+            kelime[kind] = buffer[ind];
+            kind++;
+        }
+        ind++;
+    }
+    kelime[kind] = '\0'; //en son parcayi alirken ',' olmadigi icin sonsuz donguye girmesi engellenir
+    return kelime;
+}
+
+void aktifsiparisgor()
+{
+    FILE* fileptr;
+    fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "r");
+    if (fileptr != NULL) {
+        char buffer[100];
+        int karakter;
+        int bufferindeks = 0;
+        while ((karakter = fgetc(fileptr)) != EOF) {
+            if (karakter == '*')
             {
                 buffer[bufferindeks] = '\0';
-                return buffer;
-            }
-            else {
+                if (!strcmp(parcala(buffer, 2), "1")) //aktif siparis ise
+                {
+                    printf("[SIPARIS] Yemek:%s", parcala(buffer, 4));
+                    printf(" | Siparis Saat:%s", parcala(buffer, 5));
+                    printf(" | Tahmini teslim saati:%s\n", parcala(buffer, 6));
+                }
                 memset(buffer, 0, sizeof(buffer));
                 bufferindeks = 0;
             }
+            else {
+                buffer[bufferindeks] = karakter;
+                bufferindeks++;
+            }
         }
-        else {
-            buffer[bufferindeks] = metin[i];
-            bufferindeks++;
-        }
-        i++;
+        fclose(fileptr);
     }
-
 }
 
 void parcalayemeklistesi(char okunanparca[]) {
@@ -89,64 +117,49 @@ void parcalayemeklistesi(char okunanparca[]) {
     }
 }
 
-void hazirlanmasuredegis(char degisensiparisid[], int hazirlamazamani)
+void hazirlanmasuredegis(char okunanparca[], int hazirlamazamani,int position)
 {
+    int zamanpos = position; //tahmini teslim baslangic pozisyonu
+    int durumpos = position; //siparis durumu baslangic pozisyonu
+
     FILE* fileptr;
     fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "r+");
     if (fileptr != NULL)
     {
-        char buffer[100];
-        int karakter;
-        int bufferindeks = 0;
+        zamanpos -= strlen(parcala(okunanparca, 8));
+        zamanpos -= strlen(parcala(okunanparca, 7));
+        zamanpos -= strlen(parcala(okunanparca, 6));
+        zamanpos -= 3; //tahmini teslim zamani kismina getiriyoruz.
+        fseek(fileptr, zamanpos, SEEK_SET);
+        fprintf(fileptr, "%04d,", hazirlamazamani); //hazirlanma suresi degistirildi.
 
-        int pos = 0; //ilgili metnin bitis pozisyonu
-        while ((karakter = fgetc(fileptr)) != EOF) { //tek tek karakter oku
-            pos++;
-            if (karakter == '*') //ilgili metin okundugunda
-            {
-                buffer[bufferindeks] = '\0';
-                if (!strcmp(parcala(buffer, 1), degisensiparisid))
-                {
-                    pos -= strlen(parcala(buffer, 8));
-                    pos -= strlen(parcala(buffer, 7));
-                    pos -= strlen(parcala(buffer, 6));
-                    pos -= 3; //pozisyonu tahmini teslim kismina getiriyoruz.
-                    fseek(fileptr, pos, SEEK_SET);
-                    fprintf(fileptr, "%04d,", hazirlamazamani);
-                    fclose(fileptr);
-                }
-                memset(buffer, 0, sizeof(buffer)); //bufferi resetlemek icin fonk
-                bufferindeks = 0; //buffere yazarken en basindan baslamak icin
-            }
-            else {
-                buffer[bufferindeks] = karakter; //okunan chari bufferin belirli indeksine yaz
-                bufferindeks++; //indeksi arttir
-            }
-        }
+        durumpos -= strlen(okunanparca);
+        durumpos += strlen(parcala(okunanparca, 1));
+        fseek(fileptr, durumpos, SEEK_SET);
+        fprintf(fileptr, "4"); //durum mutfakta olarak ayarlandi.
         fclose(fileptr);
-    }
+        }
 }
 
-void ascilaridagit(char okunanparca[])
+void ascilaridagit(char okunanparca[],int position)
 {
     if (!strcmp(parcala(okunanparca, 2), "1")) //aktif siparis ise
     {
         int yemeksure = hazirlamasuresibul(parcala(okunanparca, 4));
         int indeks = enazmesgulasci(ascilarsure);
-        printf("Asci%d ", indeks + 1);
-        printf("[%s]", parcala(okunanparca, 1));
-        printf(" YEMEK:%s", parcala(okunanparca, 4));
-        printf(" FIYAT:%s", parcala(okunanparca, 8));
-        printf(" SIPARIS ZAMANI:%s", parcala(okunanparca, 5));
+        printf("Asci%d", indeks + 1);
+        printf(" | [%s]", parcala(okunanparca, 1));
+        printf(" | YEMEK:%s", parcala(okunanparca, 4));
+        printf(" | FIYAT:%sTL", parcala(okunanparca, 8));
+        printf(" | SIPARIS ZAMANI:%s", parcala(okunanparca, 5));
+
         int hazirlamazamani = dakikatopla(atoi(parcala(okunanparca, 6)), ascilarsure[indeks]); //tahmini sure + ascinin mesguliyeti
-        printf(" HAZIRLANMA ZAMANI: %04d", hazirlamazamani);
+        printf(" | HAZIRLANMA ZAMANI: %04d", hazirlamazamani);
 
-        char sipid[20];
-        strcpy(sipid, parcala(okunanparca, 1));
-        hazirlanmasuredegis(sipid, hazirlamazamani); //hazirlama zamanini siprislertxt uzerinde degisir.
+        hazirlanmasuredegis(okunanparca, hazirlamazamani,position); //hazirlama zamanini siprislertxt uzerinde degisir.
 
-        printf(" KULLANICI:%s \n", parcala(okunanparca, 3));
-        ascilarsure[indeks] += yemeksure;
+        printf(" | KULLANICI:%s \n", parcala(okunanparca, 3));
+        ascilarsure[indeks] += yemeksure; //ascinin mesguliyetini arttir
     }
 }
 
@@ -172,7 +185,7 @@ void listeyioku(int k) {
                 if (k == 0)
                     parcalayemeklistesi(buffer);
                 if (k == 1)
-                    ascilaridagit(buffer);
+                    ascilaridagit(buffer,position);
                 memset(buffer, 0, sizeof(buffer)); //bufferi resetlemek icin fonk
                 bufferindeks = 0; //buffere yazarken en basindan baslamak icin
             }
@@ -187,12 +200,15 @@ void listeyioku(int k) {
 
 int main()
 {
+    aktifsiparisgor();
+    printf("-------------------------------------------------------------------------------\n");
     printf("Ascilari gorevlendirmek icin [1]\n");
     int key;
     scanf("%d", &key);
     if (key == 1)
     {
-        listeyioku(0);
+        printf("\n");
+        listeyioku(0); //yemek adlarini ve hazirlanma surelerini okur
         listeyioku(1); //ascilari dagitir
     }
 }
