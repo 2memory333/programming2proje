@@ -7,7 +7,8 @@ char yemekadlari[20][30];
 char yemeksureleri[20][4];
 int index = 0; //parcala yemek listesi fonksiyonunda sirayla dizilere yerlestirmek icin
 
-int ascilarsure[3] = {0,0,0}; //her ascinin mesguliyet suresi
+const int ascisayisi = 3;
+int ascilarsure[ascisayisi] = {0,0,0}; //her ascinin mesguliyet suresi
 
 int dakikatopla(int saat, int dakika) {
 
@@ -47,36 +48,35 @@ int hazirlamasuresibul(char *dizi) //yemek adini kullanarak o yemegin suresini b
     return 0;
 }
 
-char* parcala(char metin[], int parca) {
-    static char buffer[100];
-    int i = 0;
-    int bufferindeks = 0;
-    int parcasayac = 0;
-
-    while (1)
+char* parcala(char buffer[], int parca)
+{
+    int count = 0;
+    char kelime[30];
+    int kind = 0;
+    int ind = 0;
+    while (buffer[ind] != '\0')
     {
-        if (metin[i] == NULL) {
-            buffer[bufferindeks] = '\0';
-            return buffer;
-        }
-        if (metin[i] == ',') {
-            parcasayac++;
-            if (parcasayac == parca)
+        if (buffer[ind] == ',')
+        {
+            count++;
+            kelime[kind] = '\0';
+            if (count == parca)
             {
-                buffer[bufferindeks] = '\0';
-                return buffer;
+                return kelime;
+                break;
             }
-            else {
-                memset(buffer, 0, sizeof(buffer));
-                bufferindeks = 0;
-            }
+            memset(kelime, 0, sizeof(kelime));
+            kind = 0;
         }
-        else {
-            buffer[bufferindeks] = metin[i];
-            bufferindeks++;
+        else
+        {
+            kelime[kind] = buffer[ind];
+            kind++;
         }
-        i++;
+        ind++;
     }
+    kelime[kind] = '\0'; //en son parcayi alirken ',' olmadigi icin sonsuz donguye girmesi engellenir
+    return kelime;
 }
 
 void aktifsiparisgor()
@@ -93,7 +93,8 @@ void aktifsiparisgor()
                 buffer[bufferindeks] = '\0';
                 if (!strcmp(parcala(buffer, 2), "1")) //aktif siparis ise
                 {
-                    printf("[SIPARIS] Yemek:%s", parcala(buffer, 4));
+                    printf("[%s]", parcala(buffer, 1));
+                    printf(" | Yemek:%s", parcala(buffer, 4));
                     printf(" | Siparis Saat:%s", parcala(buffer, 5));
                     printf(" | Tahmini teslim saati:%s\n", parcala(buffer, 6));
                 }
@@ -142,7 +143,7 @@ void hazirlanmasuredegis(char okunanparca[], int hazirlamazamani,int position)
         }
 }
 
-void ascilaridagit(char okunanparca[],int position)
+void ascilarigorevlendir(char okunanparca[],int position)
 {
     if (!strcmp(parcala(okunanparca, 2), "1")) //aktif siparis ise
     {
@@ -163,6 +164,7 @@ void ascilaridagit(char okunanparca[],int position)
         ascilarsure[indeks] += yemeksure; //ascinin mesguliyetini arttir
     }
 }
+
 
 void listeyioku(int k) {
 
@@ -186,7 +188,7 @@ void listeyioku(int k) {
                 if (k == 0)
                     parcalayemeklistesi(buffer);
                 if (k == 1)
-                    ascilaridagit(buffer,position);
+                    ascilarigorevlendir(buffer,position);
                 memset(buffer, 0, sizeof(buffer)); //bufferi resetlemek icin fonk
                 bufferindeks = 0; //buffere yazarken en basindan baslamak icin
             }
@@ -201,14 +203,8 @@ void listeyioku(int k) {
 
 int main()
 {
-    aktifsiparisgor();
-    printf("-------------------------------------------------------------------------------\n");
-    printf("Ascilari gorevlendirmek icin [1]\n");
-    int key;
-    scanf("%d", &key);
-    if (key == 1)
+    while (1)
     {
-        printf("\n");
         listeyioku(0); //yemek adlarini ve hazirlanma surelerini okur
         listeyioku(1); //ascilari dagitir
     }
