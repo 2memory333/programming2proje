@@ -7,8 +7,10 @@ char yemekadlari[20][30];
 char yemeksureleri[20][4];
 int index = 0; //parcala yemek listesi fonksiyonunda sirayla dizilere yerlestirmek icin
 
-const int ascisayisi = 3;
-int ascilarsure[ascisayisi] = {0,0,0}; //her ascinin mesguliyet suresi
+int ascisayisi;
+FILE* ptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\degiskenler.txt", "r");
+int result = fscanf(ptr, "%d,", &ascisayisi);
+int* ascilarsure = (int*)malloc(ascisayisi * sizeof(int)); //?
 
 int dakikatopla(int saat, int dakika) {
 
@@ -27,7 +29,7 @@ int enazmesgulasci(int ascilarsure[])
 {
     int temp = ascilarsure[0];
     int musaitasci = 0;
-    for (int i = 1; i < 3; i++)
+    for (int i = 1; i < ascisayisi; i++)
     {
         if (ascilarsure[i] < temp)
         {
@@ -203,6 +205,11 @@ void listeyioku(int k) {
 
 int main()
 {
+    for (int i = 0; i < ascisayisi; i++)
+    {
+        ascilarsure[i] = 0;
+    }
+    printf("TOPLAMDA %d ASCI GOREV YAPMAKTADIR!\nSIPARIS GELDIGINDE ASCILAR OTOMATIK OLARAK GOREVLENDIRILECEKTIR\n\n", ascisayisi);
     while (1)
     {
         listeyioku(0); //yemek adlarini ve hazirlanma surelerini okur
