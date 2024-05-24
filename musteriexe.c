@@ -9,7 +9,7 @@ typedef struct {
     char sure[4];
 }yemek;
 
-const char kisiid[16] = "434330"; //!degisemez kisi id! 
+const char kisiid[16] = "434330"; //!degisemez kisi id!
 yemek yemekler[20];
 int yemeksayisi = 0;
 int gecmis; //gecmis veya mevcut siparislerin goruntulenmesi icin bool
@@ -120,7 +120,7 @@ void parcalasiparisler(char okunanparca[]) {
                 printf(" | SIPARIS TARIHI:%s ", parcala(okunanparca, 7));
                 printf(" | ODENMIS TUTAR:TL%s\n", parcala(okunanparca, 8));
             }
-            else
+            if (!strcmp(parcala(okunanparca, 2), "3"))
             {
                 printf("[IPTAL]");
                 printf(" IPTAL EDILMIS YEMEK:%s ", parcala(okunanparca, 4));
