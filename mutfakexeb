@@ -8,8 +8,7 @@ char yemeksureleri[30][4];
 int index = 0; //parcala yemek listesi fonksiyonunda sirayla dizilere yerlestirmek icin
 
 int ascisayisi;
-
-int* ascilarsure = (int*)malloc(ascisayisi * sizeof(int)); //?
+int* ascilarsure; //asci sayisina bagli ascisureleri olusturmak icin bellekte boş pointer tanimliyoruz.
 
 int dakikatopla(int saat, int dakika) {
 
@@ -260,9 +259,14 @@ void listeyioku(int k) {
 
 int main()
 {
-    FILE* ptr15 = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\degiskenler.txt", "r");
-    int result = fscanf(ptr15, "%d,", &ascisayisi);
-    fclose(ptr15);
+    FILE* degiskenlerptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\degiskenler.txt", "r");
+    if(degiskenlerptr == NULL){
+        printf("Asci sayisi okunamadi!");
+        return 1;
+    }
+    fscanf(degiskenlerptr, "%d,", &ascisayisi);
+    fclose(degiskenlerptr);
+    ascilarsure = (int*)malloc(ascisayisi * sizeof(int)); // ascilarsure sayi dizisi icin dinamik bellek tahsisi yapilir,
     for (int i = 0; i < ascisayisi; i++)
     {
         ascilarsure[i] = 0;
@@ -290,4 +294,3 @@ bas:
         goto bas;
     }
 }
-
