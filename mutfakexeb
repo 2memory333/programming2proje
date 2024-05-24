@@ -91,13 +91,14 @@ int gecmissipariskontrol(int okunansaat)
     zamanstruct = localtime(&t);
     int gsaat = zamanstruct->tm_hour;
     int gdakika = zamanstruct->tm_min;
-
+    if (gsaat < osaat)
+        return 0;
     if (gsaat > osaat)
-        gecmis = 1;
-    else
-        if (gdakika > odakika)
-            gecmis = 1;
-    return gecmis;
+        return 1;
+    if (gsaat = osaat)
+        if (gdakika < odakika)
+        return 0;
+    return 1; //eger saat ve dakika esit ise
 }
 
 void siparisbitir(int pos, char okunanparca[])
