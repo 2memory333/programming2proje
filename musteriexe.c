@@ -9,7 +9,7 @@ typedef struct {
     char sure[4];
 }yemek;
 
-char kisiid[16] = "122312";
+const char kisiid[16] = "434330"; //!degisemez kisi id! 
 yemek yemekler[20];
 int yemeksayisi = 0;
 int gecmis; //gecmis veya mevcut siparislerin goruntulenmesi icin bool
@@ -22,7 +22,7 @@ char* parcala(char metin[], int parca) {
 
     while (1)
     {
-        if (metin[i] == NULL) {
+        if (metin[i] == NULL) { //sonuncu parcaya geldigimizde
             buffer[bufferindeks] = '\0';
             return buffer;
         }
@@ -33,10 +33,8 @@ char* parcala(char metin[], int parca) {
                 buffer[bufferindeks] = '\0';
                 return buffer;
             }
-            else {
-                memset(buffer, 0, sizeof(buffer));
-                bufferindeks = 0;
-            }
+            memset(buffer, 0, sizeof(buffer));
+            bufferindeks = 0;
         }
         else {
             buffer[bufferindeks] = metin[i];
@@ -78,18 +76,18 @@ int guncelzaman(int isaret) {
     zaman = localtime(&t);
 
     switch (isaret) {
-    case 1:
+    case 1: //saat
         gsaat = zaman->tm_hour;
         gdakika = zaman->tm_min;
         return gsaat * 100 + gdakika;
         break;
-    case 2:
+    case 2: //gun
         return zaman->tm_mday;
         break;
-    case 3:
+    case 3: //ay
         return zaman->tm_mon + 1;
         break;
-    case 4:
+    case 4: //yil
         return zaman->tm_year + 1900;
         break;
     }
@@ -243,7 +241,7 @@ siparis:
         return 0;
     FILE* dosya;
     dosya = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "a"); //txt'ye ekleme yapar
-    fprintf(dosya, "SIP%s_%d,2,%s,%s,%04d,%04d,%02d%02d%d,%s*", kisiid, siparisidolustur(), kisiid, yemekler[kod].isim, guncelzaman(1), dakikatopla(guncelzaman(1), atoi(yemekler[kod].sure)), guncelzaman(2), guncelzaman(3), guncelzaman(4), yemekler[kod].fiyat);
+    fprintf(dosya, "SIP%s_%d,2,%s,%s,%04d,%04d,%02d%02d%d,%s,AX*", kisiid, siparisidolustur(), kisiid, yemekler[kod].isim, guncelzaman(1), dakikatopla(guncelzaman(1), atoi(yemekler[kod].sure)), guncelzaman(2), guncelzaman(3), guncelzaman(4), yemekler[kod].fiyat);
     fclose(dosya);
     printf("%s siparisi basariyla alindi.\n", yemekler[kod].isim);
     goto siparis;
