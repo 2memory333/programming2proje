@@ -334,6 +334,18 @@ void listeyioku(int k) {
     }
 }
 
+void elemansil(char dizi[], int yemeksayi, int sira) //yemeklistesinden yemek siler
+{
+    for (int i = sira - 1; i < yemeksayi - 1; i++)
+    {
+        strcpy(yemekler[i].isim, yemekler[i + 1].isim);
+        strcpy(yemekler[i].mevcutluk, yemekler[i + 1].mevcutluk);
+        strcpy(yemekler[i].fiyat, yemekler[i + 1].fiyat);
+        strcpy(yemekler[i].sure, yemekler[i + 1].sure);
+    }
+    yemeksayisi--;
+}
+
 int main()
 {
     int param1;
@@ -359,7 +371,7 @@ bas:
                 printf("[SIRA]:%d | [MEVCUTLUK]:%s | [YEMEK ADI]:%s | [FIYATI]:%sTL | [HAZIRLANMA SURESI]:%sDK\n", i, yemekler[i].mevcutluk, yemekler[i].isim, yemekler[i].fiyat, yemekler[i].sure);
             }
             printf("------------------------------------------------------------------------------------------------------------------------\n");
-            printf("\nKomutlar: k kaydet, e ekle \nkomut kodlari: m mevcutluk , a yemek adi, f fiyat, s hazirlanma suresi   komutkodu-(sira)-(birim)\n");
+            printf("\nKomutlar: k kaydet, s sil, e ekle (e-1-pizza-150-15) \nkomut kodlari: m mevcutluk , a yemek adi, f fiyat, z hazirlanma suresi   komutkodu-(sira)-(birim)\n");
             printf("Geri donmek icin [1]\n");
 
             int i = 0;
@@ -388,7 +400,7 @@ bas:
                 key = strtok(NULL, "-");
                 strcpy(yemekler[sirakodu].fiyat, key);
             }
-            if (*key == 's') { //sure harfse hata ver
+            if (*key == 'z') { //sure harfse hata ver
                 sirakodu = atoi(strtok(NULL, "-"));
                 key = strtok(NULL, "-");
                 strcpy(yemekler[sirakodu].sure, key);
@@ -407,6 +419,10 @@ bas:
                     fprintf(dosya, "%s,%s,%s,%s*", yemekler[i].mevcutluk, yemekler[i].isim, yemekler[i].fiyat, yemekler[i].sure);
                 }
                 fclose(dosya);
+            }
+            if (*key == 's') { //0 veya 1 olmali degilse hata verdirt
+                sirakodu = atoi(strtok(NULL, "-"));
+                elemansil(yemekler[sirakodu].mevcutluk, yemeksayisi, sirakodu+1);
             }
         }
     }
