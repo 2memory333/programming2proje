@@ -9,20 +9,20 @@ typedef struct {
     char sure[4];
 }yemek;
 
-const char kisiid[16] = "434330"; //!degisemez kisi id!
-yemek yemekler[20];
+const char kisiid[16] = "434330";
+yemek yemekler[30];
 int yemeksayisi = 0;
 int gecmis; //gecmis veya mevcut siparislerin goruntulenmesi icin bool
 
-char* parcala(char metin[], int parca) {
-    static char buffer[100];
+char* parcala(char metin[], int parca) {            //geriye string döndürmek için kullanılır
+    static char buffer[100];            // fonk disi cagrilar arasinda degeri korunur
     int i = 0;
     int bufferindeks = 0;
     int parcasayac = 0;
 
     while (1)
     {
-        if (metin[i] == NULL) { //sonuncu parcaya geldigimizde
+        if (metin[i] == NULL) {
             buffer[bufferindeks] = '\0';
             return buffer;
         }
@@ -33,8 +33,10 @@ char* parcala(char metin[], int parca) {
                 buffer[bufferindeks] = '\0';
                 return buffer;
             }
-            memset(buffer, 0, sizeof(buffer));
-            bufferindeks = 0;
+            else {
+                memset(buffer, 0, sizeof(buffer));
+                bufferindeks = 0;
+            }
         }
         else {
             buffer[bufferindeks] = metin[i];
@@ -76,18 +78,18 @@ int guncelzaman(int isaret) {
     zaman = localtime(&t);
 
     switch (isaret) {
-    case 1: //saat
+    case 1:
         gsaat = zaman->tm_hour;
         gdakika = zaman->tm_min;
         return gsaat * 100 + gdakika;
         break;
-    case 2: //gun
+    case 2:
         return zaman->tm_mday;
         break;
-    case 3: //ay
+    case 3:
         return zaman->tm_mon + 1;
         break;
-    case 4: //yil
+    case 4:
         return zaman->tm_year + 1900;
         break;
     }
@@ -121,7 +123,7 @@ void parcalasiparisler(char okunanparca[]) {
                 printf(" | ODENMIS TUTAR:TL%s\n", parcala(okunanparca, 8));
             }
             if (!strcmp(parcala(okunanparca, 2), "3"))
-            {
+            { 
                 printf("[IPTAL]");
                 printf(" IPTAL EDILMIS YEMEK:%s ", parcala(okunanparca, 4));
                 printf(" | SIPARIS SAATI:%s ", parcala(okunanparca, 5));
@@ -164,7 +166,7 @@ void parcalasiparisler(char okunanparca[]) {
 void parcalayemeklistesi(char okunanparca[]) {
     if (strcmp(parcala(okunanparca, 1), "0"))
     {
-        strcpy(yemekler[yemeksayisi].isim, parcala(okunanparca, 2));
+        strcpy(yemekler[yemeksayisi].isim, parcala(okunanparca, 2));              //yemeksayisi + 1 olmasinin sebebi kodlari 1 den baslatarak geri don kodunu 0 yapmak
         strcpy(yemekler[yemeksayisi].fiyat, parcala(okunanparca, 3));
         strcpy(yemekler[yemeksayisi].sure, parcala(okunanparca, 4));
         yemeksayisi++;
@@ -176,12 +178,12 @@ void listeyioku(int k) {
 
     FILE* fileptr;
     if (k == 0) {
-        fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\yemeklistesi.txt", "r");
+        fileptr = fopen("C:\\veritabani\\yemeklistesi.txt", "r");
         if (fileptr == NULL)
             printf("Yemeklistesi.txt acilamadi");
     }
     else {
-        fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "r");
+        fileptr = fopen("C:\\veritabani\\siparisler.txt", "r");
         if (fileptr == NULL)
             printf("Siparisler.txt acilamadi.");
     }
@@ -216,7 +218,7 @@ int mainsoru() {
     int secenek;
 
     printf("Hosgeldiniz! Ne yapmak istiyorsunuz?\n\n");
-    printf("[1] yemek listesini goruntule\n[2] siparis durumunu gor\n[3] onceki siparislerimi goruntule\n");
+    printf("[1] yemek listesini goruntule\n[2] siparis durumunu gor\n[3] onceki siparislerimi goruntule\n[4] Programdan cik\n");
     scanf("%d", &secenek);
 
     return secenek;
@@ -229,18 +231,18 @@ int siparisolustur()
     yemeksayisi = 0;
     listeyioku(0);
 
-    for (int i = 0; i < yemeksayisi; i++)
+    for (int i = 1; i <= yemeksayisi; i++)
     {
         printf("KOD:[%d] YEMEK:%s YEMEK FIYATI:%sTL HAZIRLANMA SURESI:%sDK\n", i, yemekler[i].isim, yemekler[i].fiyat, yemekler[i].sure);
     }
     int kod;
 siparis:
-    printf("\nGeri donmek icin [50], Siparis edilecek yemek kodu: ");
+    printf("\nGeri donmek icin [0], Siparis edilecek yemek kodu: ");
     scanf("%d", &kod);
-    if (kod == 50)
+    if (kod == 0)
         return 0;
     FILE* dosya;
-    dosya = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "a"); //txt'ye ekleme yapar
+    dosya = fopen("C:\\veritabani\\siparisler.txt", "a"); //txt'ye ekleme yapar
     fprintf(dosya, "SIP%s_%d,2,%s,%s,%04d,%04d,%02d%02d%d,%s,AX*", kisiid, siparisidolustur(), kisiid, yemekler[kod].isim, guncelzaman(1), dakikatopla(guncelzaman(1), atoi(yemekler[kod].sure)), guncelzaman(2), guncelzaman(3), guncelzaman(4), yemekler[kod].fiyat);
     fclose(dosya);
     printf("%s siparisi basariyla alindi.\n", yemekler[kod].isim);
@@ -290,6 +292,7 @@ baslangic:
         break;
 
     case 2: //siparis durumu
+
         key = siparisdurumu();
         if (!key)
             goto baslangic;
@@ -299,6 +302,8 @@ baslangic:
         key = gecmissiparisler();
         if (!key)
             goto baslangic;
+        break;
+    case 4:
         break;
     }
 }
