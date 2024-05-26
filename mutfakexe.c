@@ -8,7 +8,19 @@ char yemeksureleri[30][4];
 int index = 0; //parcala yemek listesi fonksiyonunda sirayla dizilere yerlestirmek icin
 
 int ascisayisi;
-int* ascilarsure; //asci sayisina bagli ascisureleri olusturmak icin bellekte boþ pointer tanimliyoruz.
+int* ascilarsure; //asci sayisina bagli ascisureleri olusturmak icin bellekte bo? pointer tanimliyoruz.
+
+int guncelsaat()
+{
+    time_t t;
+    struct tm* zaman;
+    t = time(NULL);
+    zaman = localtime(&t);
+    int saat = zaman->tm_hour;
+    int dakika = zaman->tm_min;
+    saat = saat * 100;
+    return saat + dakika;
+}
 
 int dakikatopla(int saat, int dakika) {
 
@@ -97,7 +109,7 @@ int gecmissipariskontrol(int okunansaat)
         return 1;
     if (gsaat = osaat)
         if (gdakika < odakika)
-        return 0;
+            return 0;
     return 1; //eger saat ve dakika esit ise
 }
 
@@ -151,7 +163,6 @@ void siparisgor(int kontrol) //eger kontrol 0 ise bekleyen siparisleri, eger 1 i
                             printf(" | YEMEK:%s", parcala(okunanparca, 4));
                             printf(" | FIYAT:%sTL", parcala(okunanparca, 8));
                             printf(" | SIPARIS ZAMANI:%s", parcala(okunanparca, 5));
-                            printf(" | HAZIRLANMA ZAMANI: %s", parcala(okunanparca, 6));
                             printf(" | KULLANICI:%s \n", parcala(okunanparca, 3));
                         }
                     }
@@ -214,10 +225,11 @@ void ascilarigorevlendir(char okunanparca[], int position)
 {
     if (!strcmp(parcala(okunanparca, 2), "1")) //aktif siparis ise
     {
-        int yemeksure = hazirlamasuresibul(parcala(okunanparca, 4));
+        int yemeksure = hazirlamasuresibul(parcala(okunanparca, 4)); //yemegin hazirlanma suresi
         int indeks = enazmesgulasci(ascilarsure);
 
-        int hazirlamazamani = dakikatopla(atoi(parcala(okunanparca, 6)), ascilarsure[indeks]); //tahmini sure + ascinin mesguliyeti
+        int hazirlamazamani = dakikatopla(guncelsaat(), ascilarsure[indeks]); //guncel saat + ascinin mesguliyeti
+        hazirlamazamani = dakikatopla(hazirlamazamani, yemeksure); // ekstradan yemegin hazirlanma suresi eklenir
         hazirlanmasuredegis(okunanparca, hazirlamazamani, position, indeks); //hazirlama zamanini siprislertxt uzerinde degisir.
         ascilarsure[indeks] += yemeksure; //ascinin mesguliyetini arttir
     }
@@ -261,7 +273,7 @@ void listeyioku(int k) {
 int main()
 {
     FILE* degiskenlerptr = fopen("C:\\veritabani\\degiskenler.txt", "r");
-    if(degiskenlerptr == NULL){
+    if (degiskenlerptr == NULL) {
         printf("Asci sayisi okunamadi!");
         return 1;
     }
