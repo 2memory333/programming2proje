@@ -262,7 +262,7 @@ void parcalasiparisler(char okunanparca[])
 
 int onayver(char siparisid[], int onaykodu)
 {
-    FILE* fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "r+");
+    FILE* fileptr = fopen("C:\\veritabani\\siparisler.txt", "r+");
     if (fileptr != NULL)
     {
         char buffer[100];
