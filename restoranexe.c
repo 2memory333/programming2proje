@@ -95,48 +95,9 @@ void encoksiparis(char metin[], int secim) //veritabanlarında aranan elemanlari
         elemansayi[key]++;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-
-int belirliaykazanc(char metin[], int secilenay)
+void arac1(char path[],int param)
 {
-    char ay[3];
-    char* temp = parcala(metin, 7);
-    ay[0] = temp[2];
-    ay[1] = temp[3];
-    ay[2] = '\0';
-    if (secilenay == atoi(ay))
-    {
-        return (atoi(parcala(metin, 8)));
-    }
-    return 0;
-}
-
-int belirlitarihtekazanc(char metin[], int secilentarih)
-{
-    if (secilentarih == atoi(parcala(metin, 7)))
-    {
-        return (atoi(parcala(metin, 8)));
-    }
-    return 0;
-}
-
-int tarihlerarasikazanc(char metin[], int tarih1, int tarih2)
-{
-    int metintarih = atoi(parcala(metin, 7));
-    if (tarih1 <= metintarih && metintarih <= tarih2)
-    {
-        return (atoi(parcala(metin, 8)));
-    }
-    return 0;
-}
-
-int araclar(int islemkodu, int param1, int param2)
-{
-    aindeks = 0;
-    memset(arananlar, 0, sizeof(arananlar));
-    memset(elemansayi, 0, sizeof(elemansayi));
-    int toplamkazanc = 0;
-    FILE* fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "r"); //bura surekli degisebilir 
+    FILE* fileptr = fopen(path, "r"); //bura surekli degisebilir 
     if (fileptr != NULL)
     {
         int indeks = 0;
@@ -147,22 +108,8 @@ int araclar(int islemkodu, int param1, int param2)
             if (karakter == '*')
             {
                 buffer[indeks] = '\0';
-                if (islemkodu == 1) //belirli ayda kazanilan
-                {
-                    toplamkazanc += belirliaykazanc(buffer, param1);
-                }
-                if (islemkodu == 2) //belirli tarihte kazanilan
-                {
-                    toplamkazanc += belirlitarihtekazanc(buffer, param1);
-                }
-                if (islemkodu == 3) //tarihler arasinda kazanilan
-                {
-                    toplamkazanc += tarihlerarasikazanc(buffer, param1, param2);
-                }
-                if (islemkodu == 4) //en cok siparis: edilen yemek, eden kullanici, edilen tarih
-                {
-                    encoksiparis(buffer, param1);
-                }
+
+                encoksiparis(buffer, param);
                 memset(buffer, 0, 100);
                 indeks = 0;
             }
@@ -173,8 +120,117 @@ int araclar(int islemkodu, int param1, int param2)
             }
         }
         fclose(fileptr);
-        return toplamkazanc;
     }
+}
+
+void araclar(int param1)
+{
+    aindeks = 0;
+    memset(arananlar, 0, sizeof(arananlar));
+    memset(elemansayi, 0, sizeof(elemansayi));
+    char path[100];
+
+    int gun = 1;
+    int ay = 1;
+    int yil = 2024;
+    while (!(gun == 31 && ay == 6 && yil == 2024)) //tarih2'ye ulasana kadar tarih1'e 1 gun ekler.
+    {
+        if (gun == 32)
+        {
+            gun = 1;
+            ay++;
+            if (ay == 13)
+            {
+                ay = 1;
+                yil++;
+            }
+        }
+        memset(path, 0, 100);
+        sprintf(path, "C:\\veritabani\\kayitlar\\%02d%02d%04d.txt", gun, ay, yil);
+        arac1(path, param1);
+        gun++;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+int kazancbul(char path[]) //verilen txt icerisindeki toplam kazanclari bulur
+{
+    int toplamkazanc = 0;
+    FILE* fileptr = fopen(path, "r"); //bura surekli degisebilir
+    if (fileptr != NULL)
+    {
+        int indeks = 0;
+        int karakter;
+        char buffer[100];
+        while ((karakter = fgetc(fileptr)) != EOF)
+        {
+            if (karakter == '*')
+            {
+                buffer[indeks] = '\0';
+                toplamkazanc += atoi(parcala(buffer, 8));
+                memset(buffer, 0, 100);
+                indeks = 0;
+            }
+            else
+            {
+                buffer[indeks] = karakter;
+                indeks++;
+            }
+        }
+        fclose(fileptr);
+    }
+    return toplamkazanc;
+}
+
+int aykazanci(int ay)
+{
+    int toplamkazanc = 0;
+    int kazanc = 0;
+    char path[100];
+    for (int gun = 1; gun <= 31; gun++)
+    {
+        memset(path, 0, 100);
+        sprintf(path, "C:\\veritabani\\kayitlar\\%02d%02d%04d.txt", gun, ay, 2024);
+        kazanc = kazancbul(path);
+        toplamkazanc += kazanc;
+    }
+    return toplamkazanc;
+}
+
+int tarihkazanci(int tarih, int tarih2)
+{
+    int toplamkazanc = 0;
+    int kazanc = 0;
+    char path[100];
+
+    int gun = tarih / 1000000;
+    int yil = tarih % 10000;
+    int ay = (tarih / 10000) - (gun * 100);
+
+    int bitisgun = tarih2 / 1000000;
+    int bitisyil = tarih2 % 10000;
+    int bitisay = (tarih2 / 10000) - (bitisgun * 100);
+
+    while (!(gun == bitisgun + 1 && ay == bitisay && yil == bitisyil)) //tarih2'ye ulasana kadar tarih1'e 1 gun ekler.
+    {
+        if (gun == 32)
+        {
+            gun = 1;
+            ay++;
+            if (ay == 13)
+            {
+                ay = 1;
+                yil++;
+            }
+        }
+        memset(path, 0, 100);
+        sprintf(path, "C:\\veritabani\\kayitlar\\%02d%02d%04d.txt", gun, ay, yil);
+        kazanc = kazancbul(path);
+        toplamkazanc += kazanc;
+        gun++;
+    }
+    return toplamkazanc;
 }
 
 //yemeklistesi.txt'nin parcasi okunup bu fonksiyona verildiginde o parcayi ayristirip ilgili degiskende kaydeder.
@@ -247,9 +303,9 @@ void listeyioku(int k) {
 
     FILE* fileptr;
     if (!k)
-        fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\yemeklistesi.txt", "r");
+        fileptr = fopen("C:\\veritabani\\yemeklistesi.txt", "r");
     else
-        fileptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\siparisler.txt", "r");
+        fileptr = fopen("C:\\veritabani\\siparisler.txt", "r");
 
     if (fileptr != NULL) {
         char buffer[100];
@@ -346,7 +402,7 @@ bas:
             }
             if (*key == 'k') { //yemek listesini kaydeder.
                 FILE* dosya;
-                dosya = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\yemeklistesi.txt", "w");
+                dosya = fopen("C:\\veritabani\\yemeklistesi.txt", "w");
                 for (int i = 0; i < yemeksayisi; i++) {
                     fprintf(dosya, "%s,%s,%s,%s*", yemekler[i].mevcutluk, yemekler[i].isim, yemekler[i].fiyat, yemekler[i].sure);
                 }
@@ -403,7 +459,7 @@ bas:
             system("cls");
             printf("Ay giriniz (ornek subat icin 2, ekim icin 10): ");
             scanf("%d", &param1);
-            printf("Secilen aydaki toplam kazanc: %dTL\n\n", araclar(1, param1, 0));
+            printf("Secilen aydaki toplam kazanc: %dTL\n\n", aykazanci(param1));
             goto islemlerbaslangic;
         }
         if (islemkodu == 2)
@@ -411,7 +467,7 @@ bas:
             system("cls");
             printf("Tarih giriniz (GGAAYYYY): ");
             scanf("%d", &param1);
-            printf("Girilen tarihdeki toplam kazanc: %dTL\n\n", araclar(2, param1, 0));
+            printf("Girilen tarihdeki toplam kazanc: %dTL\n\n", tarihkazanci(param1,param1));
             goto islemlerbaslangic;
         }
         if (islemkodu == 3)
@@ -419,13 +475,13 @@ bas:
             system("cls");
             printf("Sirayla iki tarih giriniz (ornek GGAAYYYY GGAAYYYY): ");
             scanf("%d %d", &param1, &param2);
-            printf("Girilen tarihler arasi toplam kazanc: %dTL\n\n", araclar(3, param1, param2));
+            printf("Girilen tarihler arasi toplam kazanc: %dTL\n\n", tarihkazanci(param1, param2));
             goto islemlerbaslangic;
         }
         if (islemkodu == 4)
         {
             system("cls");
-            araclar(4, 3, 0);
+            araclar(3);
             printf("En fazla siparis veren kullanici: %s\n", arananlar[dizienbuyuk(elemansayi)]);
             printf("Verdigi siparis sayisi: %d\n\n", elemansayi[dizienbuyuk(elemansayi)]);
 
@@ -434,24 +490,24 @@ bas:
         if (islemkodu == 5)
         {
             system("cls");
-            araclar(4, 4, 0);
+            araclar(4);
             printf("En fazla siparis edilen yemek: %s \nTercih sayisi: %d\n\n", arananlar[dizienbuyuk(elemansayi)], elemansayi[dizienbuyuk(elemansayi)]);
             goto islemlerbaslangic;
         }
         if (islemkodu == 6)
         {
             system("cls");
-            araclar(4, 7, 0);
+            araclar(7);
             printf("En fazla siparis verilen tarih: %s (GGAAYYYY)\n", arananlar[dizienbuyuk(elemansayi)]);
             printf("Verilen toplam siparis: %d\n", elemansayi[dizienbuyuk(elemansayi)]);
-            printf("Toplanan kazanc: %dTL\n\n", araclar(2, atoi(arananlar[dizienbuyuk(elemansayi)]), 0));
+            printf("Toplanan kazanc: %dTL\n\n", tarihkazanci(atoi(arananlar[dizienbuyuk(elemansayi)]), atoi(arananlar[dizienbuyuk(elemansayi)])));
             goto islemlerbaslangic;
         }
         if (islemkodu == 7)
         {
             printf("Calisacak asci sayisini giriniz: ");
             scanf("%d", &islemkodu);
-            FILE* ptr = fopen("C:\\Users\\Efe\\Desktop\\proje\\bin\\Debug\\degiskenler.txt", "r+");
+            FILE* ptr = fopen("C:\\veritabani\\degiskenler.txt", "r + ");
             fseek(ptr, 0, SEEK_SET);
             fprintf(ptr, "%02d", islemkodu);
             fclose(ptr);
@@ -466,8 +522,8 @@ bas:
             printf("\nKayit tarihini gun ay yil giriniz ornek(GGAAYYYY): ");
             scanf("%s", saveislemtarih);
             strcat(saveislemtarih,".txt");
-
-            char path[50] = "kayitlar\\siparisler_";
+     
+            char path[50] = "C:\\veritabani\\kayitlar\\siparisler";
             strcat(path, saveislemtarih);
             FILE* fileptr = fopen(path,"r");
             if (fileptr != NULL)
@@ -479,11 +535,11 @@ bas:
                 goto islemlerbaslangic;
             }
 
-            char komut[300] = "copy siparisler.txt kayitlar\\siparisler_";
+            char komut[300] = "copy C:\\veritabani\\siparisler.txt C:\\veritabani\\kayitlar\\";
             strcat(komut, saveislemtarih);
             system(komut);
-            system("del siparisler.txt");
-            system("type nul > siparisler.txt");
+            system("del C:\\veritabani\\siparisler.txt");
+            system("type nul > C:\\veritabani\\siparisler.txt");
             system("cls");
             printf("Kayit alindi.\n\n");
             goto islemlerbaslangic;
