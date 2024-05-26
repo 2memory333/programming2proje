@@ -9,7 +9,7 @@ typedef struct {
     char sure[4];
 }yemek;
 
-const char kisiid[16] = "434330";
+const char kisiid[16] = "555330";
 yemek yemekler[30];
 int yemeksayisi = 0;
 int gecmis; //gecmis veya mevcut siparislerin goruntulenmesi icin bool
@@ -107,6 +107,30 @@ int dakikatopla(int saat, int dakika) {
     return sayihalindesaat;
 }
 
+int kalandk(int st2)
+{
+    int st1 = guncelzaman(1); //guncel saati cek
+    int st1saat = st1 / 100;
+    int st1dk = st1 % 100;
+
+    int st2saat = st2 / 100;
+    int st2dk = st2 % 100;
+
+    int st1toplamdk = st1saat * 60 + st1dk; //st1'in toplam dakikasi
+    int st2toplamdk = st2saat * 60 + st2dk; //st2'nin toplam dakikasi
+
+    int farkdk = st2toplamdk - st1toplamdk; //ikisi arasindaki fark
+
+    if (farkdk >= 0)
+    {
+        return farkdk;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 //siparisler.txt parcalar
 void parcalasiparisler(char okunanparca[]) {
 
@@ -156,7 +180,8 @@ void parcalasiparisler(char okunanparca[]) {
                 printf(" | Siparis Saat:%s", parcala(okunanparca, 5));
                 printf(" | Teslim Saati:%s", parcala(okunanparca, 6));
                 printf(" | Tarih:%s", parcala(okunanparca, 7));
-                printf(" | Tutar:%sTL\n", parcala(okunanparca, 8));
+                printf(" | Tutar:%sTL", parcala(okunanparca, 8));
+                printf(" | KALAN DK: %d\n", kalandk(atoi(parcala(okunanparca, 6))));
             }
         }
     }
@@ -231,7 +256,7 @@ int siparisolustur()
     yemeksayisi = 0;
     listeyioku(0);
 
-    for (int i = 1; i <= yemeksayisi; i++)
+    for (int i = 0; i < yemeksayisi; i++)
     {
         printf("KOD:[%d] YEMEK:%s YEMEK FIYATI:%sTL HAZIRLANMA SURESI:%sDK\n", i, yemekler[i].isim, yemekler[i].fiyat, yemekler[i].sure);
     }
